@@ -203,7 +203,7 @@ class STOREDATA extends Controller
 			if($pagu_rkpd){
 				$pagu_rkpd['y']=[];
 				$pagu_rkpd['y']=$pagu_rkpd['y']+$pagu;
-				if((((int)$pagu_rkpd['pagu'])==((int)$pagu['total_pagu'])) and ($pagu_rkpd['transactioncode']==$pagu['transactioncode'])){
+				if(((number_format((int)$pagu_rkpd['pagu']))==(number_format((int)$pagu['total_pagu']))) and ($pagu_rkpd['transactioncode']==$pagu['transactioncode'])){
 					$approve=true;
 
 					$in=DB::table('rkpd.'.'master_'.$tahun.'_status_data')->updateOrInsert([

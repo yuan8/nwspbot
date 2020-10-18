@@ -194,6 +194,8 @@ class LISTDATA extends Controller
 	}
 
     public static  function getData($tahun=2020){
+        set_time_limit(-1);
+        ini_set('memory_limit', '6095M');
 
     	$time=((int)microtime(true));
     	$schema='prokeg';

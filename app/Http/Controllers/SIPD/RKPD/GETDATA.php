@@ -129,6 +129,7 @@ class GETDATA extends Controller
 
 	public static function getData($tahun=2020,$kodepemda=11,$status=5,$transactioncode=111,$console=false){
     	set_time_limit(-1);
+        ini_set('memory_limit', '6095M');
     	static::$transactioncode=$transactioncode;
 
 		try {
