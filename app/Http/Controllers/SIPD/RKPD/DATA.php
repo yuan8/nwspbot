@@ -42,7 +42,7 @@ class DATA extends Controller
                 $data_save['kegiatan'][$value->kodedata]['id_sub_urusan']=$value->id_sub_urusan;
                 $data_save['kegiatan'][$value->kodedata]['id_urusan']=$value->id_urusan;
 
-                
+
             }
 
             Storage::put('BOT/SIPD/RKPD/'.$tahun.'/JSON-PEMETAAN/'.$kodepemda.'.json',json_encode($data_save));
@@ -80,7 +80,7 @@ class DATA extends Controller
             'kodepemda'=>$kodepemda,
             'tahun'=>$tahun
         ]);
-        
+
 
         if($request->bidang){
             $skpd=$skpd->where('uraibidang',$request->bidang);
@@ -99,7 +99,7 @@ class DATA extends Controller
 
         ->selectRaw("
              string_agg(k.id::text,',') as ids,string_agg(p.id::text,',') as p_ids,max(k.kodekegiatan) as kodekegiatan,max(k.uraikegiatan) as uraikegiatan,max(k.kodepemda) as kodepemda,sum(k.pagu) as pagu ,max(p.kodeskpd) as p_kodeskpd, max(p.uraiskpd) as p_uraiskpd,max(p.kodebidang) as p_kodebidang,max(p.uraibidang) as p_uraibidang,max(p.kodeprogram) as p_kodeprogram,max(p.uraiprogram) as p_uraiprogram,max(k.id_urusan) as id_urusan,max(k.id_sub_urusan) as id_sub_urusan,(select u.nama from public.master_urusan as u where u.id=max(k.id_urusan)) as nama_urusan,(select s.nama from public.master_sub_urusan as s where s.id=max(k.id_sub_urusan)) as nama_sub_urusan");
-        
+
         if(($request->bidang)){
             $data=$data->where('p.uraibidang','ilike',$request->bidang);
 
@@ -126,7 +126,7 @@ class DATA extends Controller
 
 
 
-    
+
         return view('sipd.rkpd.pemetaan')->with([
 
           'data'=>$data,
@@ -151,11 +151,11 @@ class DATA extends Controller
 
       }
 
-  
+
 
     public function download($tahun,$kodepemda=null,Request $request){
       set_time_limit(-1);
-      ini_set('memory_limit', '6095M');
+      ini_set('memory_limit', '8095M');
       $name='';
       foreach ($request->all() as $key => $value) {
           # code...'
@@ -172,7 +172,7 @@ class DATA extends Controller
       $name.='-data-rekap.xlsx';
 
 
-     
+
 
       $where=[];
       if($kodepemda){
@@ -190,7 +190,7 @@ class DATA extends Controller
       if($request->pemda){
         $where[]="n.kodepemda in ('".implode("','", $request->pemda)."')";
       }
-    
+
       if($request->bidang){
         $where[]="n.uraibidang in ('".implode("','", $request->bidang)."')";
       }
@@ -202,11 +202,11 @@ class DATA extends Controller
 
 
        $data=DB::table(DB::raw("( select * from ((
-        select 
-            1 as index, 
-            k.id_program as index_p, 
-            0 as index_pi, 
-            min(k.id) as index_k, 
+        select
+            1 as index,
+            k.id_program as index_p,
+            0 as index_pi,
+            min(k.id) as index_k,
             0 as index_ki,
             min(b.kodepemda) as kodepemda,
             (case when (length(min(k.kodepemda))>3) then concat(min(d.nama),' - ',(select p.nama from public.master_daerah as p where p.id = left(min(k.kodepemda),2))) else min(d.nama) end) as nama_pemda,
@@ -229,21 +229,21 @@ class DATA extends Controller
             '' as target,
             '' as satuan,
             null as pagu_indikator
-        from rkpd.master_".$tahun."_kegiatan as k 
+        from rkpd.master_".$tahun."_kegiatan as k
         left join rkpd.master_".$tahun."_program as p on p.id=k.id_program
         left join rkpd.master_".$tahun."_bidang as b on b.id=k.id_bidang
         left join public.master_urusan as u on u.id=k.id_urusan
         left join public.master_sub_urusan as su on su.id=k.id_sub_urusan
         left join public.master_daerah as d on d.id=k.kodepemda
-        group by k.id_program   
-        ) 
-        union 
+        group by k.id_program
+        )
+        union
         (
-        select 
-            2 as index, 
-            k.id_program as index_p, 
-            pi.id as index_pi, 
-            k.id as index_k, 
+        select
+            2 as index,
+            k.id_program as index_p,
+            pi.id as index_pi,
+            k.id as index_k,
             0 as index_ki,
             k.kodepemda,
             (case when (length(k.kodepemda)>3) then concat(d.nama,' - ',(select p.nama from public.master_daerah as p where p.id = left(k.kodepemda,2))) else d.nama end) as nama_pemda,
@@ -266,21 +266,21 @@ class DATA extends Controller
             pi.target as target,
             pi.satuan as satuan,
             pi.pagu as pagu_indikator
-        from rkpd.master_".$tahun."_kegiatan as k 
+        from rkpd.master_".$tahun."_kegiatan as k
         left join rkpd.master_".$tahun."_program as p on p.id=k.id_program
         left join rkpd.master_".$tahun."_bidang as b on b.id=k.id_bidang
         left join public.master_urusan as u on u.id=k.id_urusan
         left join public.master_sub_urusan as su on su.id=k.id_sub_urusan
         left join public.master_daerah as d on d.id=k.kodepemda
-        join rkpd.master_".$tahun."_program_capaian as pi on pi.id_program =k.id_program 
-        ) 
+        join rkpd.master_".$tahun."_program_capaian as pi on pi.id_program =k.id_program
+        )
         union
         (
-        select 
-            3 as index, 
-            k.id_program as index_p, 
-            0 as index_pi, 
-            k.id as index_k, 
+        select
+            3 as index,
+            k.id_program as index_p,
+            0 as index_pi,
+            k.id as index_k,
             0 as index_ki,
             b.kodepemda,
             (case when (length(k.kodepemda)>3) then concat(d.nama,' - ',(select p.nama from public.master_daerah as p where p.id = left(k.kodepemda,2))) else d.nama end) as nama_pemda,
@@ -303,20 +303,20 @@ class DATA extends Controller
             '' as target,
             '' as satuan,
             null as pagu_indikator
-        from rkpd.master_".$tahun."_kegiatan as k 
+        from rkpd.master_".$tahun."_kegiatan as k
         left join rkpd.master_".$tahun."_program as p on p.id=k.id_program
         left join rkpd.master_".$tahun."_bidang as b on b.id=k.id_bidang
         left join public.master_urusan as u on u.id=k.id_urusan
         left join public.master_sub_urusan as su on su.id=k.id_sub_urusan
         left join public.master_daerah as d on d.id=k.kodepemda
         )
-        union 
+        union
         (
-        select 
-            4 as index, 
-            k.id_program as index_p, 
-            0 as index_pi, 
-            k.id as index_k, 
+        select
+            4 as index,
+            k.id_program as index_p,
+            0 as index_pi,
+            k.id as index_k,
             ki.id as index_ki,
             k.kodepemda,
             (case when (length(k.kodepemda)>3) then concat(d.nama,' - ',(select p.nama from public.master_daerah as p where p.id = left(k.kodepemda,2))) else d.nama end) as nama_pemda,
@@ -339,7 +339,7 @@ class DATA extends Controller
             ki.target as target,
             ki.satuan as satuan,
             ki.pagu as pagu_indikator
-        from rkpd.master_".$tahun."_kegiatan as k 
+        from rkpd.master_".$tahun."_kegiatan as k
         left join rkpd.master_".$tahun."_program as p on p.id=k.id_program
         left join rkpd.master_".$tahun."_bidang as b on b.id=k.id_bidang
         left join public.master_urusan as u on u.id=k.id_urusan
@@ -376,7 +376,7 @@ class DATA extends Controller
           $d=array_values((array)$d);
           foreach ($d as $keyv => $dd) {
             $sheet->setCellValue(static::$abj[$keyv].($start+$key), $dd);
-           
+
           }
         }
 
@@ -384,7 +384,7 @@ class DATA extends Controller
 
         $writer = new Xlsx($spreadsheet);
         $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($spreadsheet, 'Xlsx');
-        
+
 
         Storage::put('public/SIPD/RKPD/'.$tahun.'/init.txt','');
         if($kodepemda!=null){
@@ -395,9 +395,9 @@ class DATA extends Controller
         }else{
             $save=$writer->save(storage_path('app/public/SIPD/RKPD/'.$tahun.'/'.$name));
             return redirect('storage/SIPD/RKPD/'.$tahun.'/'.$name);
-            
+
         }
-   
+
 
     }
 }

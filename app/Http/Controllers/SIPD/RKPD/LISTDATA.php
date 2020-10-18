@@ -289,12 +289,12 @@ class LISTDATA extends Controller
     		 }
 
     		 if(count($data_return)>0){
-    		 	Storage::put('BOT/SIPD/RKPD/'.'master_'.$tahun.'/list-data.json',json_encode($data_return));
+    		 	Storage::put('BOT/SIPD/RKPD/'.$tahun.'/list-data.json',json_encode($data_return));
 
-    		 	Storage::put('BOT/SIPD/RKPD/'.'master_'.$tahun.'/PEMETAAN-DATA-TAMBAHAN/index.text','DIGUNAKAN UNTUK RECORD DATA TAMBAHAN');
+    		 	Storage::put('BOT/SIPD/RKPD/'.$tahun.'/JSON-PEMETAAN/index.text','DIGUNAKAN UNTUK RECORD DATA TAMBAHAN');
 
-    		 	Storage::put('BOT/SIPD/RKPD/'.'master_'.$tahun.'/JSON-SIPD/index.text','BERISI DATA MASTER DARI SIPD');
-    		 	Storage::put('BOT/SIPD/RKPD/'.'master_'.$tahun.'/JSON-DATA/index.text','BERISI DATA MASTER DARI SIPD YANG TELAH DILAKUKAN PERUBAHAN DATA (+ DATA TAMBAHAN) DENGAN FORMAT YANG TELAH DIPERBAIKI');
+    		 	Storage::put('BOT/SIPD/RKPD/'.$tahun.'/JSON-SIPD/index.text','BERISI DATA MASTER DARI SIPD');
+    		 	Storage::put('BOT/SIPD/RKPD/'.$tahun.'/JSON-DATA/index.text','BERISI DATA MASTER DARI SIPD YANG TELAH DILAKUKAN PERUBAHAN DATA (+ DATA TAMBAHAN) DENGAN FORMAT YANG TELAH DIPERBAIKI');
 
 
     		 }

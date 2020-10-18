@@ -14,7 +14,7 @@
 						@foreach($pemda as $b)
 						<option value="{{$b->id}}">{{$b->nama_pemda}}</option>
 					@endforeach
-					
+
 				</select>
 			</div>
 			<div class="col-md-2">
@@ -23,7 +23,7 @@
 					@foreach($urusan as $b)
 						<option value="{{$b->id}}">{{$b->nama}}</option>
 					@endforeach
-					
+
 				</select>
 			</div>
 			<div class="col-md-2">
@@ -32,7 +32,7 @@
 					@foreach($bidang as $b)
 						<option value="{{$b}}">{{$b}}</option>
 					@endforeach
-					
+
 				</select>
 			</div>
 			<div class="col-md-2">
@@ -48,7 +48,7 @@
 
 						@endphp
 					</select>
-			</div>	
+			</div>
 			<div class="col-md-2">
 				<label>KECOCOKAN</label>
 				<select name="match" class="form-control">
@@ -61,7 +61,7 @@
 			<div class="col-md-2">
 				<p><b>ACTION</b></p>
 				<button type="submit" class="btn btn-primary btn-sm">DOWNLOAD</button>
-			</div>	
+			</div>
 
 		</div>
 		</form>
@@ -79,7 +79,7 @@
 
 		<div class="row">
 			<div class="col-md-4">
-				
+
 				<div class="input-group">
 					<select class="form-control input-sm"  onchange="window.location.href=(this.value)" >
 						@php
@@ -104,7 +104,7 @@
 
 
 			</div>
-		
+
 		</div>
 	</div>
 
@@ -202,7 +202,7 @@
 						<option value="true" {{(!empty($request->match))?($request->match==true?'selected':''):''}}>SESUAI</option>
 						<option value="false" {{(!empty($request->match))?($request->match==false?'selected':''):''}}>BELUM</option>
 
-		
+
 
 					</select>
 				</th>
