@@ -117,8 +117,8 @@ class DATA extends Controller
         }
 
 
-        $urusan=Db::table('public.master_urusan')->get();
-        $sub_urusan=Db::table('public.master_sub_urusan')->get();
+        $urusan=Db::table('public.master_urusan')->whereIn('id',json_decode(env('URUSAN'),true))->get();
+        $sub_urusan=Db::table('public.master_sub_urusan')->whereIn('id_urusan',json_decode(env('URUSAN'),true))->get();
 
         $data=$data->get();
 
