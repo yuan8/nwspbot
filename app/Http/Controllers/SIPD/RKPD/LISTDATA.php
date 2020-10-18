@@ -179,7 +179,7 @@ class LISTDATA extends Controller
             $data->whereRaw(implode(' and ', $where));
         }
 
-        $data=$data->get();
+        $data=$data->get()->toArray();
 
         $pemda=DB::table('public.master_daerah as d')
         ->selectRaw("id,(case when (length(d.id::text)>3) then concat(d.nama,' - ',(select p.nama from public.master_daerah as p where p.id=d.kode_daerah_parent::text limit 1)) else d.nama end) as nama_pemda")->orderBy('id','asc')
