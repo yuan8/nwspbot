@@ -161,12 +161,10 @@
 						</button>
 
 						@endif
-						@if($d->attemp)
+						@if($d->attemp or $d->rkpd_match)
 								<a href="{{route('sipd.rkpd.json',['tahun'=>$tahun,'json_id'=>$d->kodepemda.'.'.$d->status.'.'.$d->transactioncode])}}" class="btn btn-primary  btn-sm">JSON</a>
 								<a href="{{route('sipd.rkpd.data.download',['tahun'=>$tahun,'kodepemda'=>$d->kodepemda])}}" class="btn btn-info  btn-sm"><i class="fa fa-download"></i> .</a>
 								<a href="{{route('sipd.rkpd.pemetaan',['tahun'=>$tahun,'kodepemda'=>$d->kodepemda])}}" class="btn btn-navy bg-navy btn-sm">PEMETAAN</a>
-
-
 						@endif
 
 						</div>
