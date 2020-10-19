@@ -736,6 +736,14 @@ class InitCtrl extends Controller
         }
 
 
+        $data=DB::table('rkpd.master_'.$tahun.'_status_data')->get();
+
+        foreach ($data as $key => $value) {
+            DB::table('rkpd.master_'.$tahun."_kegiatan")->where('kodepemda',$value->kodepemda)
+            ->update(['status'=>$value->status]);
+        }
+
+
     }
 }
 
