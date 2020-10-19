@@ -200,8 +200,6 @@
 						<option value="">SEMUA</option>
 					<option value="true" {{(!empty($request->match))?((string)$request->match=="true"?'selected':''):''}}>SESUAI</option>
 						<option value="false" {{(!empty($request->match))?((string)$request->match=="false"?'selected':''):''}}>BELUM</option>
-
-
 					</select>
 				</th>
 				<th></th>
