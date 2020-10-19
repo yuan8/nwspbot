@@ -111,7 +111,7 @@ class STOREDATA extends Controller
 						$dbi['id_bidang']=static::$id_bidang;
 						$dbi['id_program']=static::$id_program;
 						$dbi['id_kegiatan']=static::$id_kegiatan;
-
+						$dbi=static::learning_indikator_kegiatan($dbi['kodedata'],$dbi);
 						DB::table('rkpd.'.'master_'.$tahun.'_kegiatan_indikator')->insertGetId($dbi);
 					}
 

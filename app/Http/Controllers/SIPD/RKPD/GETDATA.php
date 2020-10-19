@@ -166,17 +166,18 @@ class GETDATA extends Controller
 			];
 
 			$context = static::con($path,'get',[]);
+			static::$kodepemda=$kodepemda;
 
 			if(file_exists(storage_path('app/BOT/SIPD/RKPD/'.$tahun.'/JSON-SIPD/'.$kodepemda.'.'.$status.'.'.$transactioncode.'.json'))){
 				static::$data_json=json_decode(file_get_contents(storage_path('app/BOT/SIPD/RKPD/'.$tahun.'/JSON-SIPD/'.$kodepemda.'.'.$status.'.'.$transactioncode.'.json')),true);
-				$data=static::buildData();
+				$data=static::buildData($tahun,$kodepemda);
 
 				Storage::put('BOT/SIPD/RKPD/'.$tahun.'/JSON-DATA/'.$kodepemda.'.'.$status.'.'.$transactioncode.'.json',json_encode(['pagu'=>static::$pagutotal,'status'=>$status,'transactioncode'=>$transactioncode,'via'=>'api','data'=>$data],true));
 
 
 			}else{
 
-				$data=static::buildData();
+				$data=static::buildData($tahun,$kodepemda);
 				Storage::put('BOT/SIPD/RKPD/'.$tahun.'/JSON-SIPD/'.$kodepemda.'.'.$status.'.'.$transactioncode.'.json',json_encode(static::$data_json));
 				Storage::put('BOT/SIPD/RKPD/'.$tahun.'/JSON-DATA/'.$kodepemda.'.'.$status.'.'.$transactioncode.'.json',json_encode(['pagu'=>static::$pagutotal,'status'=>$status,'transactioncode'=>$transactioncode,'via'=>'api','data'=>$data],true));
 
@@ -217,7 +218,9 @@ class GETDATA extends Controller
 	}
 
 
-	static function buildData(){
+	static function buildData($tahun,$kodepemda){
+		
+
 		$data_return=[];
 		if((!is_array(static::$data_json))){
 			static::$data_json=[];
