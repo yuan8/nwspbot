@@ -88,8 +88,8 @@
           <th>KODEKEGIATAN</th>
           <th>URAIKEGIATAN</th>
           <th>PAGU</th>
-          <th style="width: 250px;">BIDANG</th>
-          <th style="width: 250px;">SUB BIDANG</th>
+          <th style="width: 250px;">URUSAN</th>
+          <th style="width: 250px;">SUB URUSAN</th>
         </tr>
       </thead>
       <tbody>
