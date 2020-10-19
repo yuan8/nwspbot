@@ -40,7 +40,7 @@ Route::prefix('bot-dss/')->middleware('auth:web')->group(function () {
 			Route::get('/handle','SIPD\RKPD\LISTDATA@needHandle')->name('sipd.rkpd.handle');
 			Route::get('/get/json/{json_id}','SIPD\RKPD\LISTDATA@getjson')->name('sipd.rkpd.json');
 			Route::get('/get-list','SIPD\RKPD\LISTDATA@getData')->name('sipd.rkpd.list.update');
-			Route::get('/get-data/{kodepemda}/{status}/{transactioncode}','SIPD\RKPD\GETDATA@getData')->name('sipd.rkpd.data.update');
+			Route::get('/get-data/{kodepemda}/{status}/{transactioncode}/{console?}','SIPD\RKPD\GETDATA@getData')->name('sipd.rkpd.data.update');
 			Route::get('/get-data-masive','SIPD\RKPD\GETDATA@store_masive')->name('sipd.rkpd.data.masive');
 			Route::get('/download/{kodepemda?}','SIPD\RKPD\DATA@download')->name('sipd.rkpd.data.download');
 			Route::get('/data/{kodepemda?}','SIPD\RKPD\IO@index')->name('sipd.rkpd.data.show');

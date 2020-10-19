@@ -95,6 +95,7 @@ class GETDATA extends Controller
     		return 'done';
     	}
 
+
     	return view('sipd.rkpd.masive')->with(['data'=>$d,'tahun'=>$tahun,'page'=>$page]);
     }
 
@@ -131,7 +132,7 @@ class GETDATA extends Controller
     	set_time_limit(-1);
         ini_set('memory_limit', '6095M');
     	static::$transactioncode=$transactioncode;
-
+    	
 		try {
         	// Hp::checkDBProKeg($tahun);
 			$file=null;
@@ -198,7 +199,6 @@ class GETDATA extends Controller
 				$store=STOREDATA::store($data,$kodepemda,$tahun,$transactioncode);
 
 			}
-
 
 			if($console){
 				$daerah=DB::table('public.master_daerah')->find($kodepemda);
