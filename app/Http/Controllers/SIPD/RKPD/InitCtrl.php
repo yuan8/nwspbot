@@ -587,6 +587,7 @@ class InitCtrl extends Controller
 
             DB::statement("create view rkpd.view_master_".$tahun."_rkpd as select * from ((
             select 
+                min(k.status) as status, 
                 1 as index, 
                 k.id_program as index_p, 
                 0 as index_pi, 
@@ -623,6 +624,7 @@ class InitCtrl extends Controller
             union 
             (
             select 
+                k.status,
                 2 as index, 
                 k.id_program as index_p, 
                 pi.id as index_pi, 
@@ -659,6 +661,7 @@ class InitCtrl extends Controller
             union
             (
             select 
+                k.status,
                 3 as index, 
                 k.id_program as index_p, 
                 0 as index_pi, 
@@ -694,6 +697,7 @@ class InitCtrl extends Controller
             union 
             (
             select 
+                k.status,
                 4 as index, 
                 k.id_program as index_p, 
                 0 as index_pi, 
