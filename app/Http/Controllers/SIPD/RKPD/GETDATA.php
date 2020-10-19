@@ -170,14 +170,14 @@ class GETDATA extends Controller
 
 			if(file_exists(storage_path('app/BOT/SIPD/RKPD/'.$tahun.'/JSON-SIPD/'.$kodepemda.'.'.$status.'.'.$transactioncode.'.json'))){
 				static::$data_json=json_decode(file_get_contents(storage_path('app/BOT/SIPD/RKPD/'.$tahun.'/JSON-SIPD/'.$kodepemda.'.'.$status.'.'.$transactioncode.'.json')),true);
-				$data=static::buildData($tahun,$kodepemda);
+				$data=static::buildData($tahun,$kodepemda,$status);
 
 				Storage::put('BOT/SIPD/RKPD/'.$tahun.'/JSON-DATA/'.$kodepemda.'.'.$status.'.'.$transactioncode.'.json',json_encode(['pagu'=>static::$pagutotal,'status'=>$status,'transactioncode'=>$transactioncode,'via'=>'api','data'=>$data],true));
 
 
 			}else{
 
-				$data=static::buildData($tahun,$kodepemda);
+				$data=static::buildData($tahun,$kodepemda,$status);
 				Storage::put('BOT/SIPD/RKPD/'.$tahun.'/JSON-SIPD/'.$kodepemda.'.'.$status.'.'.$transactioncode.'.json',json_encode(static::$data_json));
 				Storage::put('BOT/SIPD/RKPD/'.$tahun.'/JSON-DATA/'.$kodepemda.'.'.$status.'.'.$transactioncode.'.json',json_encode(['pagu'=>static::$pagutotal,'status'=>$status,'transactioncode'=>$transactioncode,'via'=>'api','data'=>$data],true));
 
@@ -218,8 +218,8 @@ class GETDATA extends Controller
 	}
 
 
-	static function buildData($tahun,$kodepemda){
-		
+	static function buildData($tahun,$kodepemda,$status){
+
 
 		$data_return=[];
 		if((!is_array(static::$data_json))){
@@ -250,7 +250,7 @@ class GETDATA extends Controller
 
 				foreach ($p['kegiatan'] as $keyk => $k) {
 					# code...
-					$data_return[$key]['program'][$keyp]['kegiatan'][]=static::kegiatan($k,$keyk);
+					$data_return[$key]['program'][$keyp]['kegiatan'][]=static::kegiatan($k,$keyk,$status);
 
 				// entity
 					if((!is_array($k['indikator']))){
@@ -394,7 +394,7 @@ class GETDATA extends Controller
 
 	}
 
-	static function kegiatan($data,$key){
+	static function kegiatan($data,$key,$status){
 		static::$kodekegiatan=$data['kodekegiatan'];
 
 		if(is_numeric($data['pagu'])){
@@ -409,6 +409,7 @@ class GETDATA extends Controller
 
 
 		$data_return=[
+			'status'=>$status,
 			'kodedata'=>$kodedata,
 			'tahun'=>(static::$tahun),
 			'kodepemda'=>static::$kodepemda,
