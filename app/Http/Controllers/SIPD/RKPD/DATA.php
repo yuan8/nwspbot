@@ -156,19 +156,8 @@ class DATA extends Controller
     public function download($tahun,$kodepemda=null,Request $request){
       set_time_limit(-1);
       ini_set('memory_limit', '8095M');
-      $name='';
-      foreach ($request->all() as $key => $value) {
-          # code...'
-        $name.=$key.":";
-        if(is_array($value)){
-            $name.=implode(',', $value);
-        }else{
-            $name.=$value;
-        }
-
-
-      }
-
+      $name=date('Y-m-d-h-i-s');
+    
       $name.='-data-rekap.xlsx';
 
 
