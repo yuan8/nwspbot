@@ -205,7 +205,7 @@ class DATA extends Controller
         ->orderBy('n.index_p','asc')
         ->orderBy('n.index_k','asc')
         ->orderBy('n.index','asc')
-        ->whereRaw(count($where)>0?implod(' and ',$where):"true")
+        ->whereRaw(count($where)>0?implode(' and ',$where):"true")
         ->get()->toArray();
 
 
