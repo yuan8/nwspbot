@@ -286,6 +286,14 @@ class LISTDATA extends Controller
                 	'tahun'=>$tahun
                 	]
                 	,$reco);
+                
+                $data_pemda=(array)DB::table('rkpd.master_'.$tahun.'_status_data')->where('kodepemda',$kodar)->first();
+
+                if($data_pemda){
+                    if(((int)($reco['pagu'])!=$data_pemda['pagu']) or ($data_pemda['transactioncode']!=$reco['transactioncode']) ){
+                        DB::table('rkpd.master_'.$tahun.'_status_data')->where('kodepemda',$kodar)->update(['matches'=>false]);
+                    }
+                }
     		 }
 
     		 if(count($data_return)>0){
