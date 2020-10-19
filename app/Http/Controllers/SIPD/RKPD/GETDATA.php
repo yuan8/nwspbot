@@ -220,7 +220,8 @@ class GETDATA extends Controller
 
 	static function buildData($tahun,$kodepemda,$status){
 
-
+		static::$tahun=$tahun;
+		static::$kodepemda=$kodepemda;
 		$data_return=[];
 		if((!is_array(static::$data_json))){
 			static::$data_json=[];
@@ -324,9 +325,8 @@ class GETDATA extends Controller
 
 	static function bidang($data,$key){
 
-		static::$kodepemda=str_replace('00','' , $data['kodepemda']);
+
 		static::$kodebidang=($data['kodebidang']);
-		static::$tahun=($data['tahun']);
 		static::$uraibidang=strtoupper(trimp($data['uraibidang'],true));
 		static::$kodeskpd=$data['kodeskpd'];
 		static::$uraiskpd=strtoupper(trimp($data['uraiskpd'],true));
