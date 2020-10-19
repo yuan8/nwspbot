@@ -327,9 +327,9 @@ class GETDATA extends Controller
 
 
 		static::$kodebidang=($data['kodebidang']);
-		static::$uraibidang=strtoupper(trimp($data['uraibidang'],true));
+		static::$uraibidang=strtoupper(trim($data['uraibidang'],true));
 		static::$kodeskpd=$data['kodeskpd'];
-		static::$uraiskpd=strtoupper(trimp($data['uraiskpd'],true));
+		static::$uraiskpd=strtoupper(trim($data['uraiskpd'],true));
 
 
 
@@ -360,7 +360,7 @@ class GETDATA extends Controller
 	static function program($data,$key){
 		static::$kodeprogram=$data['kodeprogram'];
 
-		static::$uraibidang=strtoupper(trimp($data['uraibidang'],true));
+		static::$uraibidang=strtoupper(trim($data['uraibidang'],true));
 		static::$kodebidang=$data['kodebidang'];
 
 
