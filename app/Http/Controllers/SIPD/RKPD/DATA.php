@@ -201,7 +201,7 @@ class DATA extends Controller
        }
 
 
-        $data=DB::table("rkpd.view_master_".$tahun."_rkpd as  n"))
+        $data=DB::table("rkpd.view_master_".$tahun."_rkpd as  n")
         ->orderBy('n.index_p','asc')
         ->orderBy('n.index_k','asc')
         ->orderBy('n.index','asc')
