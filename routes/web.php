@@ -21,6 +21,8 @@ Route::get('/home', 'HomeController@index')->name('home');
 
 Route::prefix('initial/{tahun}')->group(function(){
 	Route::get('rkpd','SIPD\RKPD\InitCtrl@init');
+	Route::get('sat','SAT\InitCtrl@init');
+
 });
 
 

@@ -583,9 +583,6 @@ class InitCtrl extends Controller
     public static function view($tahun){
         $schema="rkpd.";
 
-
-            
-
         if(!(DB::table(DB::raw("(select * from information_schema.tables where table_schema='rkpd' and table_name='view_master_".$tahun."_rkpd') as c"))->first())){
 
             DB::statement("create view rkpd.view_master_".$tahun."_rkpd as select * from ((
@@ -595,7 +592,7 @@ class InitCtrl extends Controller
                 0 as index_pi, 
                 min(k.id) as index_k, 
                 0 as index_ki,
-                min(b.kodepemda) as kodepemda,
+                min(k.kodepemda) as kodepemda,
                 (case when (length(min(k.kodepemda))>3) then concat(min(d.nama),' - ',(select p.nama from public.master_daerah as p where p.id = left(min(k.kodepemda),2))) else min(d.nama) end) as nama_pemda,
                 min(k.id_urusan) as id_urusan,
                 'PROGRAM' as jenis,
@@ -603,7 +600,7 @@ class InitCtrl extends Controller
                 min(k.id_sub_urusan) as id_sub_urusan,
                 min(su.nama) as nama_sub_urusan,
                 min(k.kodebidang) as kodebidang,
-                min(b.uraibidang) as uraibidang,
+                min(p.uraibidang) as uraibidang,
                 min(p.kodeskpd) as kodeskpd,
                 min( p.uraiskpd) as uraiskpd,
                 min(k.kodeprogram) as kodeprogram,
@@ -618,7 +615,6 @@ class InitCtrl extends Controller
                 null as pagu_indikator
             from rkpd.master_".$tahun."_kegiatan as k 
             left join rkpd.master_".$tahun."_program as p on p.id=k.id_program
-            left join rkpd.master_".$tahun."_bidang as b on b.id=k.id_bidang
             left join public.master_urusan as u on u.id=k.id_urusan
             left join public.master_sub_urusan as su on su.id=k.id_sub_urusan
             left join public.master_daerah as d on d.id=k.kodepemda
@@ -640,7 +636,7 @@ class InitCtrl extends Controller
                 k.id_sub_urusan,
                 su.nama as nama_sub_urusan,
                 k.kodebidang,
-                b.uraibidang,
+                p.uraibidang,
                 p.kodeskpd,
                 p.uraiskpd,
                 k.kodeprogram,
@@ -655,7 +651,6 @@ class InitCtrl extends Controller
                 pi.pagu as pagu_indikator
             from rkpd.master_".$tahun."_kegiatan as k 
             left join rkpd.master_".$tahun."_program as p on p.id=k.id_program
-            left join rkpd.master_".$tahun."_bidang as b on b.id=k.id_bidang
             left join public.master_urusan as u on u.id=k.id_urusan
             left join public.master_sub_urusan as su on su.id=k.id_sub_urusan
             left join public.master_daerah as d on d.id=k.kodepemda
@@ -669,7 +664,7 @@ class InitCtrl extends Controller
                 0 as index_pi, 
                 k.id as index_k, 
                 0 as index_ki,
-                b.kodepemda,
+                k.kodepemda,
                 (case when (length(k.kodepemda)>3) then concat(d.nama,' - ',(select p.nama from public.master_daerah as p where p.id = left(k.kodepemda,2))) else d.nama end) as nama_pemda,
                 k.id_urusan,
                 'KEGIATAN' as jenis,
@@ -677,7 +672,7 @@ class InitCtrl extends Controller
                 k.id_sub_urusan,
                 su.nama as nama_sub_urusan,
                 k.kodebidang,
-                b.uraibidang,
+                p.uraibidang,
                 p.kodeskpd,
                 p.uraiskpd,
                 k.kodeprogram,
@@ -692,7 +687,6 @@ class InitCtrl extends Controller
                 null as pagu_indikator
             from rkpd.master_".$tahun."_kegiatan as k 
             left join rkpd.master_".$tahun."_program as p on p.id=k.id_program
-            left join rkpd.master_".$tahun."_bidang as b on b.id=k.id_bidang
             left join public.master_urusan as u on u.id=k.id_urusan
             left join public.master_sub_urusan as su on su.id=k.id_sub_urusan
             left join public.master_daerah as d on d.id=k.kodepemda
@@ -713,7 +707,7 @@ class InitCtrl extends Controller
                 k.id_sub_urusan,
                 su.nama as nama_sub_urusan,
                 k.kodebidang,
-                b.uraibidang,
+                p.uraibidang,
                 p.kodeskpd,
                 p.uraiskpd,
                 k.kodeprogram,
@@ -728,7 +722,6 @@ class InitCtrl extends Controller
                 ki.pagu as pagu_indikator
             from rkpd.master_".$tahun."_kegiatan as k 
             left join rkpd.master_".$tahun."_program as p on p.id=k.id_program
-            left join rkpd.master_".$tahun."_bidang as b on b.id=k.id_bidang
             left join public.master_urusan as u on u.id=k.id_urusan
             left join public.master_sub_urusan as su on su.id=k.id_sub_urusan
             left join public.master_daerah as d on d.id=k.kodepemda
