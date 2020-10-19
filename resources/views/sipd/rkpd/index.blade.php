@@ -53,8 +53,8 @@
 				<label>KECOCOKAN</label>
 				<select name="match" class="form-control">
 						<option value="">SEMUA</option>
-						<option value="true" {{(!empty($request->match))?($request->match==true?'selected':''):''}}>SESUAI</option>
-						<option value="false" {{(!empty($request->match))?($request->match==false?'selected':''):''}}>BELUM</option>
+						<option value="true" {{(!empty($request->match))?((boolean)$request->match==true?'selected':''):''}}>SESUAI</option>
+						<option value="false" {{(!empty($request->match))?((boolean)$request->match==false?'selected':''):''}}>BELUM</option>
 
 				</select>
 			</div>
@@ -199,8 +199,8 @@
 				<th>
 					<select name="match" class="form-control" onchange="$('#form-search').submit()">
 						<option value="">SEMUA</option>
-						<option value="true" {{(!empty($request->match))?($request->match==true?'selected':''):''}}>SESUAI</option>
-						<option value="false" {{(!empty($request->match))?($request->match==false?'selected':''):''}}>BELUM</option>
+						<option value="true" {{(!empty($request->match))?((boolean)$request->match==true?'selected':''):''}}>SESUAI</option>
+						<option value="false" {{(!empty($request->match))?((boolean)$request->match==false?'selected':''):''}}>BELUM</option>
 
 
 
