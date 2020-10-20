@@ -53,10 +53,10 @@ class MasterUrusanPusat extends Migration
     public function down()
     {
         //
-        $schema='public.';
+        // $schema='public.';
         
-        Schema::connection('pgsql')->dropIfExists($schema.'master_sub_urusan');
-        Schema::connection('pgsql')->dropIfExists($schema.'master_urusan');
+        // Schema::connection('pgsql')->dropIfExists($schema.'master_sub_urusan');
+        // Schema::connection('pgsql')->dropIfExists($schema.'master_urusan');
 
     }
 }

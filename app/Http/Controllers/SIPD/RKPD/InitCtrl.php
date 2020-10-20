@@ -155,6 +155,11 @@ class InitCtrl extends Controller
                 $table->longText('target_n1')->nullable();
                 $table->double('pagu_n1',25,3)->default(0);
             	$table->integer('jenis')->nullable();
+                $table->bigInteger('rpjmn')->nullable();
+                $table->bigInteger('spm')->nullable();
+                $table->bigInteger('sdgs')->nullable();
+                $table->bigInteger('lainya')->nullable();
+                
                 $table->bigInteger('transactioncode')->nullable();
             		$table->timestamps();
 
@@ -281,6 +286,14 @@ class InitCtrl extends Controller
 		                $table->longText('target_n1')->nullable();
 		                $table->double('pagu_n1',25,3)->default(0);
 		            	$table->integer('jenis')->nullable();
+                        $table->bigInteger('rpjmn')->nullable();
+                        $table->bigInteger('spm')->nullable();
+                        $table->bigInteger('sdgs')->nullable();
+                        $table->bigInteger('lainya')->nullable();
+
+
+
+
 		                $table->bigInteger('transactioncode')->nullable();
 		            	$table->timestamps();
 
@@ -553,6 +566,10 @@ class InitCtrl extends Controller
                         $table->longText('target_n1')->nullable();
                         $table->double('pagu_n1',25,3)->default(0);
                         $table->integer('jenis')->nullable();
+                        $table->bigInteger('rpjmn')->nullable();
+                        $table->bigInteger('spm')->nullable();
+                        $table->bigInteger('sdgs')->nullable();
+                        $table->bigInteger('lainya')->nullable();
                         $table->bigInteger('transactioncode')->nullable();
                         $table->timestamps();
 

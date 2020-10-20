@@ -28,6 +28,13 @@ Route::prefix('connection-sinkronisasi')->group(function(){
 
 Route::prefix('sipd/rkpd/{tahun}')->group(function(){
 	Route::post('/{kodepemda}/pemetaan','SIPD\RKPD\DATA@update_pemetaan_kegiatan')->name('api.sipd.rkpd.pemetaan.update.kegiatan');
+	Route::post('/{kodepemda}/pemetaan/get-indikator/{context}','SIPD\RKPD\DATA@api_indikator')->name('api.sipd.rkpd.pemetaan.api.get.indikator');
+	Route::get('/{kodepemda}/pemetaan/get-master-indikator/{context}','SIPD\RKPD\DATA@api_master_indikator')->name('api.sipd.rkpd.pemetaan.api.get.master.indikator');
+	Route::post('/{kodepemda}/pemetaan/indikator','SIPD\RKPD\DATA@update_pemetaan_indikator')->name('api.sipd.rkpd.pemetaan.api.update.indikator');
+
+
+
+
 
 });
 

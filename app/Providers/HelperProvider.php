@@ -52,4 +52,48 @@ class HelperProvider extends ServiceProvider
       }
       return $status;
     }
+
+
+    static function tipe_indikator(){
+      return [
+        'rpjmn'=>'RPJMN',
+        'spm'=>'SPM',
+        'sdgs'=>'SDGS',
+        'lainya'=>'LAINYA'
+      ];
+    }
+
+    static function menus($for){
+      switch (strtolower($for)) {
+        case 'sipd':
+          # code...
+         return  static::sipd_menu();
+          break;
+        
+        default:
+          # code...
+          break;
+      }
+    }
+
+    static function sipd_menu(){
+      $menus=[
+        'MENU RKPD',
+        [
+          'text'=>'RKPD',
+          'href'=>route('sipd.rkpd',['tahun'=>isset($tahun)?$tahun:date('Y')]),
+        ],
+        [
+          'text'=>'MASTER PEMETAAN INDIKATOR',
+          'href'=>route('sipd.rkpd.ind.master'),
+        ],
+        [
+          'text'=>'DASHBOARD',
+          'href'=>route('sipd.rkpd.d.indikator',[isset($tahun)?$tahun:date('Y')]),
+        ]
+
+      ];
+
+      return $menus;
+    }
 }

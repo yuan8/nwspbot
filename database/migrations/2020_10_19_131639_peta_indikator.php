@@ -19,9 +19,13 @@ class PetaIndikator extends Migration
                Schema::connection('pgsql')->create($schema.'master_peta_indikator',function(Blueprint $table) use ($schema){
                     $table->bigIncrements('id');
                     $table->text('nama');
+                    $table->double('target',25,3)->default(0);
+                    $table->string('satuan')->nullable();
+                    $table->string('tipe');
                     $table->longText('deskripsi')->nullable();
                     $table->bigInteger('id_urusan')->unsigned();
                     $table->bigInteger('id_sub_urusan')->unsigned();
+                    $table->integer('follow')->nullable();
                     $table->timestamps();
 
 
