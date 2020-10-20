@@ -60,6 +60,22 @@ $plugins=[
                 ],
             ],
         ],
+        [
+            'name' => 'axios',
+            'active' => false,
+            'files' => [
+                [
+                    'type' => 'css',
+                    'asset' => true,
+                    'location' => url('bower_components/PACE/themes/black/pace-theme-loading-bar.css'),
+                ],
+                [
+                    'type' => 'js',
+                    'asset' => true,
+                    'location' => url('bower_components/PACE/pace.min.js'),
+                ],
+            ],
+        ],
     ];
 
 @endphp

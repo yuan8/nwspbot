@@ -1,3 +1,5 @@
+
+
 @if (is_string($item))
     <li class="header">{{ $item }}</li>
 @elseif (isset($item['header']))
@@ -16,6 +18,25 @@
         </div>
       </form>
 @else
+    @php
+
+        $def_item=[
+            'class'=>'',
+            'href'=>'',
+            'target'=>'',
+            'icon'=>'',
+            'icon_color'=>'',
+            'text'=>'',
+            'label_color'=>'',
+            'lable'=>''
+
+        ];
+
+        $item=array_merge($def_item,$item);
+
+
+    @endphp
+
     <li class="{{ $item['class'] }}">
         <a href="{{ $item['href'] }}"
            @if (isset($item['target'])) target="{{ $item['target'] }}" @endif

@@ -12,7 +12,7 @@
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect()->route('login');
 });
 
 Auth::routes();
@@ -33,9 +33,33 @@ Route::get('/box-nuwsp-api/{tahun?}', 'BOT@get_nuwsp_api')->name('box.nuwsp.api'
 
 
 Route::prefix('bot-dss/')->middleware('auth:web')->group(function () {
+		Route::prefix('sipd/rkpd/master')->group(function(){
+			Route::get('/indikator','SIPD\RKPD\MasterPemetaanIndikatorCtrl@index')->name('sipd.rkpd.ind.master');
+			Route::get('/indikator/satuan','SIPD\RKPD\MasterPemetaanIndikatorCtrl@satuan')->name('sipd.rkpd.ind.master.satuan');
+			Route::get('/indikator','SIPD\RKPD\MasterPemetaanIndikatorCtrl@index')->name('sipd.rkpd.ind.master');
+
+			Route::get('/indikator/create','SIPD\RKPD\MasterPemetaanIndikatorCtrl@create')->name('sipd.rkpd.ind.master.create');
+			Route::get('/indikator/edit/{id}','SIPD\RKPD\MasterPemetaanIndikatorCtrl@edit')->name('sipd.rkpd.ind.master.edit');
+			Route::post('/indikator/update/{id}','SIPD\RKPD\MasterPemetaanIndikatorCtrl@update')->name('sipd.rkpd.ind.master.update');
+
+
+			Route::post('/indikator/create','SIPD\RKPD\MasterPemetaanIndikatorCtrl@store')->name('sipd.rkpd.ind.master.store');
+
+
+
+		});
 		Route::prefix('sipd/rkpd/{tahun}')->group(function () {
+
 			Route::get('/','SIPD\RKPD\LISTDATA@index')->name('sipd.rkpd');
+			Route::get('/dashboard/indikator','SIPD\RKPD\DashboardIndikatorCtrl@index')->name('sipd.rkpd.d.indikator');
+			Route::get('/dashboard/indikator/detail/{tipe}','SIPD\RKPD\DashboardIndikatorCtrl@detail')->name('sipd.rkpd.d.indikator.detail');
+			Route::get('/dashboard/indikator-pusat/detail/{id}','SIPD\RKPD\DashboardIndikatorCtrl@detail_indikator_kalkulasi')->name('sipd.rkpd.d.indikator.kelkulasi.detail');
+
+
+
 			Route::get('/pemetaan/{kodepemda}','SIPD\RKPD\DATA@pemetaan')->name('sipd.rkpd.pemetaan');
+			Route::get('/pemetaan/{kodepemda}/get-data','SIPD\RKPD\DATA@api_pemetaan')->name('sipd.rkpd.pemetaan.data');
+
 
 			Route::get('/handle','SIPD\RKPD\LISTDATA@needHandle')->name('sipd.rkpd.handle');
 			Route::get('/get/json/{json_id}','SIPD\RKPD\LISTDATA@getjson')->name('sipd.rkpd.json');

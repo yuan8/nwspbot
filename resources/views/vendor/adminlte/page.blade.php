@@ -5,6 +5,7 @@
           href="{{ asset('vendor/adminlte/dist/css/skins/skin-' . config('adminlte.skin', 'blue') . '.min.css')}} ">
     @stack('css')
     @yield('css')
+
    
 @stop
 
@@ -115,7 +116,7 @@
 
                 <!-- Sidebar Menu -->
                 <ul class="sidebar-menu" data-widget="tree">
-                    @each('adminlte::partials.menu-item', isset($side_active)??[], 'item')
+                    @each('adminlte::partials.menu-item', isset($side_active)?$side_active:[], 'item')
                 </ul>
                 <!-- /.sidebar-menu -->
             </section>
@@ -180,5 +181,13 @@
     .modal-xl{
         max-width: 98%;
         width: 90%!important;
+    }
+    .select2-selection__choice{
+        white-space: break-spaces;
+        max-width: 100%;
+        color: #222!important;
+    }
+    .align-top{
+        vertical-align: top!important;
     }
 </style>

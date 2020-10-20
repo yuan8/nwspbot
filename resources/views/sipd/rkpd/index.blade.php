@@ -1,4 +1,4 @@
-@extends('adminlte::page',['layoutBuild'=>['menuBuild'=>'RKPD','tahun'=>$tahun]])
+@extends('adminlte::page',['side_active'=>Hp::menus('sipd')])
 
 @section('content')
 <div class="box box-solid">

@@ -21,6 +21,77 @@ class DATA extends Controller
       static $subkegiatan=[];
 
 
+      public function api_indikator($tahun,$kodepemda,$context,Request $request){
+        $ids=[];
+        if($request->ids){
+          $ids=$request->ids;
+        }
+
+
+        if($context==1){
+          $data=DB::table('rkpd.master_'.$tahun.'_program_capaian as c')
+          ->where(['c.kodepemda'=>$kodepemda])
+          ->whereIn('c.id_program',$ids)
+          ->get();
+          $jenis='OUTCOME';
+          $kegiatan=DB::table('rkpd.master_'.$tahun.'_kegiatan')->whereIn('id',$request->k_ids)->first();
+          $meta=[
+            'id_urusan'=>$kegiatan->id_urusan,
+            'id_sub_urusan'=>null,        
+          ];
+
+
+        }else if($context==2){
+          
+          $kegiatan=DB::table('rkpd.master_'.$tahun.'_kegiatan')->whereIn('id',$ids)->first();
+
+          $data=DB::table('rkpd.master_'.$tahun.'_kegiatan_indikator as i')
+          ->where(['i.kodepemda'=>$kodepemda])
+          ->whereIn('i.id_kegiatan',$ids)
+          ->get();
+          $jenis='OUTPUT';
+            $meta=[
+            'id_urusan'=>$kegiatan->id_urusan,
+            'id_sub_urusan'=>$kegiatan->id_sub_urusan,        
+          ];
+
+
+        }
+
+
+  
+
+        $return="";
+        
+        return view('sipd.rkpd.them_indikator_list')->with(['context'=>$context,'kodepemda'=>$kodepemda,'tahun'=>$tahun,'items'=>$data,'jenis'=>$jenis,'meta'=>$meta])->render();
+        
+
+
+      }
+
+      public function api_master_indikator($tahun,$kodepemda,$tipe,Request $request){
+        $data=DB::table('rkpd.master_peta_indikator as i')
+          ->leftJoin('public.master_urusan as u','u.id','=','i.id_urusan')
+          ->leftJoin('public.master_sub_urusan as su','su.id','=','i.id_sub_urusan')
+          ->selectRaw("i.id, concat(i.nama,' (',i.target,' ',i.satuan,')',' - ','<small>',u.nama,' - ',su.nama,'</small>') as text")
+          ->where('tipe',$tipe);
+          if($request->urusan){
+            $data=$data->where('i.id_urusan',$request->urusan);
+          }
+          if($request->sub_urusan){
+            $data=$data->where('i.id_sub_urusan',$request->sub_urusan);
+          }
+
+          if($request->q){
+            $data=$data->where('i.nama','ilike','%'.$request->q.'%');
+          }
+
+          $data=$data->get();
+
+          return ['results'=>$data];
+      }
+
+
       public function update_pemetaan_kegiatan($tahun,$kodepemda,Request $request){
         $up= DB::table('rkpd.master_'.$tahun.'_kegiatan')->whereIn('id',$request->id)->update($request->data);
         if($up){
@@ -54,6 +125,81 @@ class DATA extends Controller
 
       }
 
+      public function update_pemetaan_indikator($tahun,$kodepemda,Request $request){
+        if($request->id){
+            $table='';
+            switch ($request->tipe) {
+              case 'RPJMN':
+                $table='rpjmn';
+                # code...
+                break;
+              case 'SPM':
+                $table='spm';
+                # code...
+                break;
+              case 'SDGS':
+                $table='sdgs';
+                # code...
+                break;
+              case 'LAINYA':
+                $table='lainya';
+                # code...
+                break;
+              
+              default:
+                # code...
+                break;
+            }
+            $data_save=[
+                  'kegiatan'=>[],
+                  'indikator_kegiatan'=>[],
+                  'indikator_program'=>[],
+               ];
+
+             if(file_exists(storage_path('app/BOT/SIPD/RKPD/'.$tahun.'/JSON-PEMETAAN/'.$kodepemda.'.json'))){
+                  $data_save=json_decode(file_get_contents(storage_path('app/BOT/SIPD/RKPD/'.$tahun.'/JSON-PEMETAAN/'.$kodepemda.'.json')),true);
+              }
+
+            if($request->context==1){
+                $data=DB::table('rkpd.master_'.$tahun.'_program_capaian')->where(['kodepemda'=>$kodepemda,'id'=>$request->id])->update([
+                  $table=>$request->value
+                ]);
+
+                if($data){
+                  $data=DB::table('rkpd.master_'.$tahun.'_program_capaian')->where(['kodepemda'=>$kodepemda,'id'=>$request->id])->first();
+                  if($data){
+                    $data_save['indikator_program'][$data->kodedata]=[
+                      'rpjmn'=>$data->rpjmn,
+                      'spm'=>$data->spm,
+                      'lainya'=>$data->lainya,
+                    ];
+                  }
+                }
+
+            }else{
+                $data=DB::table('rkpd.master_'.$tahun.'_kegiatan_indikator')->where(['kodepemda'=>$kodepemda,'id'=>$request->id])->update([
+                  $table=>$request->value
+                ]);
+
+                if($data){
+                  $data=DB::table('rkpd.master_'.$tahun.'_kegiatan_indikator')->where(['kodepemda'=>$kodepemda,'id'=>$request->id])->first();
+                  if($data){
+                    $data_save['indikator_kegiatan'][$data->kodedata]=[
+                      'rpjmn'=>$data->rpjmn,
+                      'spm'=>$data->spm,
+                      'lainya'=>$data->lainya,
+                    ];
+                  }
+                }
+            }
+
+            if($data_save){
+                Storage::put('BOT/SIPD/RKPD/'.$tahun.'/JSON-PEMETAAN/'.$kodepemda.'.json',json_encode($data_save));
+                return json_encode($data,true);
+            }
+          }
+      }
+
 
       public function pemetaan($tahun,$kodepemda,Request $request){
         DB::enableQueryLog(); // Enable query log
@@ -81,20 +227,80 @@ class DATA extends Controller
             'tahun'=>$tahun
         ]);
 
+        $urusan=Db::table('public.master_urusan')->whereIn('id',json_decode(env('URUSAN'),true))->get();
+        $sub_urusan=Db::table('public.master_sub_urusan')->whereIn('id_urusan',json_decode(env('URUSAN'),true))->get();
 
         if($request->bidang){
             $skpd=$skpd->where('uraibidang',$request->bidang);
         }
-
         $skpd=$skpd->groupBy('uraiskpd')->selectRaw('uraiskpd,max(uraibidang)')->get()->pluck('uraiskpd');
+        // dd
 
+        $data=DB::table('rkpd.'.'master_'.$tahun.'_kegiatan as k')->where([
+          'k.kodepemda'=>$kodepemda,
+          'k.tahun'=>$tahun
+        ])
+        ->join('rkpd.master_'.$tahun.'_program as p','p.id','=','k.id_program')
+        ->selectRaw('sum(pagu) as pagu ,count(distinct(uraikegiatan)) as count');
+         if(($request->bidang)){
+            $data=$data->where('p.uraibidang','ilike',$request->bidang);
+
+        }
+        if(($request->q)){
+            $data=$data->where('k.uraikegiatan','ilike','%'.$request->q.'%');
+
+        }
+        if(($request->skpd) and (in_array($request->skpd,(array)$skpd->toArray()))){
+
+          $data=$data->where('p.uraiskpd','ilike',$request->skpd);
+        }else if($request->skpd){
+            return redirect()->route('sipd.rkpd.pemetaan',['tahun'=>$tahun,'kodepemda'=>$kodepemda,'bidang'=>$request->bidang]);
+
+        }
+
+
+        $data=$data->first();
+        $data_rekap=$data->pagu;
+
+
+        return view('sipd.rkpd.pemetaan')->with([
+
+          'data'=>$data,
+          'tahun'=>$tahun,
+          'skpd'=>$skpd,
+          'bidang'=>$bidang,
+          'request'=>$request,
+          'status'=>$status,
+          'daerah'=>$daerah,
+          'urusan'=>$urusan,
+          'kodepemda'=>$kodepemda,
+          'sub_urusan'=>$sub_urusan,
+          'pagu'=>($data_rekap)
+
+        ]);
+
+
+        // (select sum(pagu) as pagu from rkpd.master_".$tahun."_kegiatan as k where  k.id_program=string_to_array(string_agg(id::text,',')) ) as pagu
+
+      }
+
+      public function api_pemetaan($tahun,$kodepemda,Request $request){
+
+        $skpd=DB::table('rkpd.master_'.$tahun.'_bidang')->where([
+            'kodepemda'=>$kodepemda,
+            'tahun'=>$tahun
+        ]);
+        if($request->bidang){
+            $skpd=$skpd->where('uraibidang',$request->bidang);
+        }
+        $skpd=$skpd->groupBy('uraiskpd')->selectRaw('uraiskpd,max(uraibidang)')->get()->pluck('uraiskpd');
 
 
         $data=DB::table('rkpd.'.'master_'.$tahun.'_kegiatan as k')->where([
           'k.kodepemda'=>$kodepemda,
           'k.tahun'=>$tahun
         ])
-        ->groupBy('uraikegiatan')
+        ->groupBy('uraikegiatan') 
         ->join('rkpd.master_'.$tahun.'_program as p','p.id','=','k.id_program')
 
         ->selectRaw("
@@ -120,34 +326,13 @@ class DATA extends Controller
         $urusan=Db::table('public.master_urusan')->whereIn('id',json_decode(env('URUSAN'),true))->get();
         $sub_urusan=Db::table('public.master_sub_urusan')->whereIn('id_urusan',json_decode(env('URUSAN'),true))->get();
 
-        $data=$data->get();
-
-        $data_rekap=$data->pluck('pagu');
+        $data=$data->orderBy(DB::raw('max(p.uraibidang)'),'asc')->orderBy(DB::raw('max(p.uraiskpd)'),'asc')->orderBy(DB::raw('max(p.uraiprogram)'),'asc')->orderBy(DB::raw('max(k.uraikegiatan)'),'asc')->paginate($request->paginate);
 
 
-
-
-        return view('sipd.rkpd.pemetaan')->with([
-
-          'data'=>$data,
-          'tahun'=>$tahun,
-          'skpd'=>$skpd,
-          'bidang'=>$bidang,
-          'request'=>$request,
-          'status'=>$status,
-          'daerah'=>$daerah,
-          'urusan'=>$urusan,
-          'sub_urusan'=>$sub_urusan,
-          'pagu'=>array_sum($data_rekap->toArray())
-
-        ]);
-
-
-        // (select sum(pagu) as pagu from rkpd.master_".$tahun."_kegiatan as k where  k.id_program=string_to_array(string_agg(id::text,',')) ) as pagu
-
-      }
-
-      public function api_pemetaan($tahun,$kodepemda,Request $request){
+        return [
+          'count'=>count($data->items()),
+          'data'=>view('sipd.rkpd.them_pemetaan')->with(['data'=>$data,'urusan'=>$urusan,'sub_urusan'=>$sub_urusan,'page'=>$request->page])->render()
+        ];
 
       }
 
