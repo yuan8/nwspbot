@@ -121,7 +121,7 @@ class GETDATA extends Controller
         	return 0;
         }
 
-    } 
+    }
 
 
 
@@ -132,7 +132,7 @@ class GETDATA extends Controller
     	set_time_limit(-1);
         ini_set('memory_limit', '6095M');
     	static::$transactioncode=$transactioncode;
-    	
+
 		try {
         	// Hp::checkDBProKeg($tahun);
 			$file=null;
@@ -170,6 +170,7 @@ class GETDATA extends Controller
 			static::$kodepemda=$kodepemda;
 
 			if(file_exists(storage_path('app/BOT/SIPD/RKPD/'.$tahun.'/JSON-SIPD/'.$kodepemda.'.'.$status.'.'.$transactioncode.'.json'))){
+
 				static::$data_json=json_decode(file_get_contents(storage_path('app/BOT/SIPD/RKPD/'.$tahun.'/JSON-SIPD/'.$kodepemda.'.'.$status.'.'.$transactioncode.'.json')),true);
 				$data=static::buildData($tahun,$kodepemda,$status);
 
@@ -195,7 +196,7 @@ class GETDATA extends Controller
 				DB::table('rkpd.master_'.$tahun.'_bidang')->where('kodepemda',$kodepemda)->where('tahun',$tahun)->delete();
 
 				DB::table('rkpd.master_'.$tahun.'_status_data')->where('kodepemda',$kodepemda)->where('tahun',$tahun)->update(['matches'=>false]);
-			
+
 				$store=STOREDATA::store($data,$kodepemda,$tahun,$transactioncode);
 
 			}
@@ -311,7 +312,7 @@ class GETDATA extends Controller
 		$ch=$kodedata;
 		if(in_array($kodedata,static::$listingcode)){
 			$ch_key=($key+1).'';
-			
+
 			do {
 				$ch_key.='X';
 				$ch=$kodedata.'['.$ch_key.']';
@@ -442,7 +443,7 @@ class GETDATA extends Controller
 		$kodedata=static::$tahun.'.'.static::$kodepemda.'.'.static::$kodebidang.'.'.static::$kodeskpd.static::$kodeprogram.static::$kodekegiatan.'.S.'.($key+1);
 
 		static::$kodesumberdana=$kodedata;
-		
+
 		$kodedata=static::kodedata($kodedata,$key);
 
 		static::$listingcode[]=$kodedata;
@@ -474,7 +475,7 @@ class GETDATA extends Controller
 		static::$kodesumberdana_sub=$kodedata;
 
 		$kodedata=static::kodedata($kodedata,$key);
-		
+
 
 		static::$listingcode[]=$kodedata;
 
@@ -505,7 +506,7 @@ class GETDATA extends Controller
 
 
 		$kodedata=static::kodedata($kodedata,$key);
-		
+
 		static::$listingcode[]=$kodedata;
 
 		$data_return=[
@@ -541,7 +542,7 @@ class GETDATA extends Controller
 		static::$kodecapaian=$kodedata;
 
 		$kodedata=static::kodedata($kodedata,$key);
-		
+
 		static::$listingcode[]=$kodedata;
 
 		$data_return=[
@@ -579,7 +580,7 @@ class GETDATA extends Controller
 		static::$kodeindikator=$kodedata;
 
 		$kodedata=static::kodedata($kodedata,$key);
-		
+
 
 		static::$listingcode[]=$kodedata;
 

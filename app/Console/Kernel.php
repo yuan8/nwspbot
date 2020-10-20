@@ -25,9 +25,9 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
             $schedule->command('make-data:rkpd 2021')
-                 ->everyFiveMinutes();
+                 ->everyMinute();
          $schedule->command('make-data:rkpd 2020')
-                 ->everyFiveMinutes();
+                 ->everyMinute();
     }
 
     /**
