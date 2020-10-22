@@ -13,7 +13,7 @@ class InitCtrl extends Controller
     //
 
 
-    public function init($tahun){
+    public static function init($tahun,$console=false){
     	static::status($tahun);
     	static::bidang($tahun);
     	static::program($tahun);
@@ -27,6 +27,14 @@ class InitCtrl extends Controller
         static::sub_kegiatan_indikator($tahun);
     	static::sub_kegiatan_sumberdana($tahun);
         static::view($tahun);
+        static::peta_indikator_kegiatan($tahun);
+        static::peta_indikator_program($tahun);
+        // static::peta_indikator_sub_kegiatan($tahun);
+
+        if($console){
+            return 'initial database RKPD '.$tahun.' is done';
+        }
+
     	return back();
     }
 
@@ -159,7 +167,7 @@ class InitCtrl extends Controller
                 $table->bigInteger('spm')->nullable();
                 $table->bigInteger('sdgs')->nullable();
                 $table->bigInteger('lainya')->nullable();
-                
+
                 $table->bigInteger('transactioncode')->nullable();
             		$table->timestamps();
 
@@ -433,6 +441,65 @@ class InitCtrl extends Controller
 
 
 	}
+
+
+    static function peta_indikator_kegiatan($tahun){
+    
+        $schema='rkpd.';
+
+        if(!Schema::connection('pgsql')->hasTable($schema.'master_'.$tahun.'_peta_indikator_kegiatan')){
+            Schema::connection('pgsql')->create($schema.'master_'.$tahun.'_peta_indikator_kegiatan',function(Blueprint $table) use ($schema,$tahun){
+               $table->bigIncrements('id');
+                    $table->text('kodedata');
+                    $table->string('kodepemda',4);
+                    $table->integer('tahun');
+                    $table->bigInteger('id_master');
+                    $table->unique(['kodepemda','kodedata','id_master','tahun']);
+                });
+                    
+                   
+         }
+
+
+    }
+
+     static function peta_indikator_program($tahun){
+    
+        $schema='rkpd.';
+
+        if(!Schema::connection('pgsql')->hasTable($schema.'master_'.$tahun.'_peta_indikator_program')){
+            Schema::connection('pgsql')->create($schema.'master_'.$tahun.'_peta_indikator_program',function(Blueprint $table) use ($schema,$tahun){
+                    $table->bigIncrements('id');
+                    $table->text('kodedata');
+                    $table->string('kodepemda',4);
+                    $table->integer('tahun');
+                    $table->bigInteger('id_master');
+                    $table->unique(['kodepemda','kodedata','id_master','tahun']);
+                });
+                                       
+         }
+
+
+    }
+
+    static function peta_indikator_sub_kegiatan($tahun){
+    
+        $schema='rkpd.';
+
+        if(!Schema::connection('pgsql')->hasTable($schema.'master_'.$tahun.'_peta_indikator_sub_kegiatan')){
+            Schema::connection('pgsql')->create($schema.'master_'.$tahun.'_peta_indikator_sub_kegiatan',function(Blueprint $table) use ($schema,$tahun){
+                     $table->bigIncrements('id');
+                    $table->text('kodedata');
+                    $table->string('kodepemda',4);
+                    $table->integer('tahun');
+                    $table->bigInteger('id_master');
+                    $table->unique(['kodepemda','kodedata','id_master','tahun']);
+                });
+                                       
+         }
+
+
+    }
 
 	static function sub_kegiatan($tahun){
 

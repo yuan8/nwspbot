@@ -54,6 +54,8 @@ Route::prefix('bot-dss/')->middleware('auth:web')->group(function () {
 			Route::get('/dashboard/indikator','SIPD\RKPD\DashboardIndikatorCtrl@index')->name('sipd.rkpd.d.indikator');
 			Route::get('/dashboard/indikator/detail/{tipe}','SIPD\RKPD\DashboardIndikatorCtrl@detail')->name('sipd.rkpd.d.indikator.detail');
 			Route::get('/dashboard/indikator-pusat/detail/{id}','SIPD\RKPD\DashboardIndikatorCtrl@detail_indikator_kalkulasi')->name('sipd.rkpd.d.indikator.kelkulasi.detail');
+			Route::get('/dashboard/indikator-pusat/detail/{id}/{kodepemda}/sebaran','SIPD\RKPD\DashboardIndikatorCtrl@detail_sebaran')->name('sipd.rkpd.d.indikator.kelkulasi.detail.sebaran');
+
 
 
 

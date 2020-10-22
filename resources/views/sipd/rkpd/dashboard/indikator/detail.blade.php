@@ -14,6 +14,7 @@
 			<th>SUB URUSAN</th>
 			<th>INDIKATOR</th>
 			<th>TARGET PUSAT</th>
+			<th>FOLLOW</th>
 			<th>SATUAN</th>
 			<th>DESKRIPSI</th>
 			<th>JUMLAH PEMDA TERIMPLEMENTASI</th>
@@ -30,6 +31,15 @@
 
 				<td>{{$d->nama}}</td>
 				<td>{{number_format($d->target)}}</td>
+				<td>
+					@if($d->follow==1)
+					<i class="fa fa-arrow-up"></i> NAIK ATAU SAMA DENGAN
+					@elseif($d->follow==99)
+					<i class="fa fa-equality"></i> <b>= </b>SAMA DENGAN
+					@elseif($d->follow==-1)
+					<i class="fa fa-arrow-down"></i> TURUN ATAU SAMA DENGAN
+				@endif
+				</td>
 				<td>{{($d->satuan)}}</td>
 				<td>{!!nl2br($d->deskripsi)!!}</td>
 				<td>{!!number_format($d->jumlah_pemda)!!} PEMDA</td>

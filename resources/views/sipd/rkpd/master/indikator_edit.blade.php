@@ -34,7 +34,7 @@
 							<select class="form-control select2-init" name="tipe" required="">
 								
 								@foreach(Hp::tipe_indikator() as $i)
-									<option {{$i==$data->tipe?'seelcted':''}} value="{{$i}}">{{$i}}</option>
+									<option {{$i==$data->tipe?'selected':''}} value="{{$i}}">{{$i}} </option>
 								@endforeach
 							</select>
 
@@ -45,7 +45,7 @@
 								
 									<option  value="">-</option>
 									<option  value="1" {{$data->follow==1?'selected':''}}><i class="fa fa-fa-angle-up" ></i> NAIK ATAU SAMA DENGAN</option>
-									<option  value="0" {{$data->follow==0?'selected':''}}><i class="fa fa-equal"></i> SAMA DENGAN</option>
+									<option  value="99" {{$data->follow==99?'selected':''}}><i class="fa fa-equal"></i> SAMA DENGAN</option>
 									<option  value="-1" {{$data->follow==-1?'selected':''}}><i class="fa fa-angle-down"></i> TURUN ATAU SAMA DENGAN</option>
 							</select>
 							<small>Hanya Digunakan Jika Indikator Merupakan kalkulasi Acceptable</small>

@@ -45,7 +45,7 @@
 								
 									<option  value="">-</option>
 									<option  value="1" ><i class="fa fa-fa-angle-up" ></i> NAIK ATAU SAMA DENGAN</option>
-									<option  value="0" ><i class="fa fa-equal"></i> SAMA DENGAN</option>
+									<option  value="99" ><i class="fa fa-equal"></i> SAMA DENGAN</option>
 									<option  value="-1" ><i class="fa fa-angle-down"></i> TURUN ATAU SAMA DENGAN</option>
 							</select>
 							<small>Hanya Digunakan Jika Indikator Merupakan kalkulasi Acceptable</small>

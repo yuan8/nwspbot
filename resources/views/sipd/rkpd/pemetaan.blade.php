@@ -230,17 +230,25 @@
   });
 
 
-  function pemetaan_indikator_update(id,context,tipe,value){
+  function pemetaan_indikator_update(id,context,tipe,class_id){
+
+    var value=[];
+    $('.'+class_id).each(function(i,d){
+      value=value.concat($(d).val());
+    });
+
+
 
     var data_request={
       id:id,
       context:context,
-      value:value,
+      data_ids:value,
       tipe:tipe
     };
+    console.log(data_request);
 
-    $.post('{{route('api.sipd.rkpd.pemetaan.api.update.indikator',['tahun'=>$tahun,'kodepemda'=>$kodepemda])}}',data_request,function(res){
-      console.log(res);
+     $.post('{{route('api.sipd.rkpd.pemetaan.api.update.indikator',['tahun'=>$tahun,'kodepemda'=>$kodepemda])}}',data_request,function(res){
+       console.log(res);
     });
   }
 </script>

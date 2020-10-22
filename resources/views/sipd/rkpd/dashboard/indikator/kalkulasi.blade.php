@@ -1,7 +1,7 @@
 @extends('adminlte::page',['layoutBuild'=>['menuBuild'=>'RKPD','tahun'=>$tahun]])
 @section('content_header')
 
-    <h1 style="margin-bottom: 10px;"><span><a href="{{route('sipd.rkpd.d.indikator.detail',['tahun'=>$tahun,'tipe'=>array_search($data_ind->tipe, Hp::tipe_indikator())])}}" class="btn btn-success btn-xs"><i class="fa fa-arrow-left"></i> Kembali</a> </span> IMPLEMENTASI INDIKATOR {{$data_ind->tipe}} TAHUN {{$tahun}}</h1>
+    <h1 style="margin-bottom: 10px;"><span><a href="{{route('sipd.rkpd.d.indikator.detail',['tahun'=>$tahun,'tipe'=>$data_ind->tipe])}}" class="btn btn-success btn-xs"><i class="fa fa-arrow-left"></i> Kembali</a> </span> IMPLEMENTASI INDIKATOR {{$data_ind->tipe}} TAHUN {{$tahun}}</h1>
     <p>
     	{!!nl2br($data_ind->deskripsi)!!}
     </p>
@@ -14,6 +14,8 @@
 		<tr>
 			<th>INDIKATOR</th>
 			<th>TIPE</th>
+			<th>FOLLOW</th>
+
 			<th>TARGET PUSAT</th>
 
 
@@ -23,6 +25,19 @@
 		<tr>
 			<td>{{$data_ind->nama}}</td>
 			<td>{{$data_ind->tipe}}</td>
+			<td>
+				@if($data_ind->follow==1)
+				<i class="fa fa-arrow-up"></i> NAIK ATAU SAMA DENGAN
+				@elseif($data_ind->follow==99)
+				<i class="fa fa-equality"></i> <b>= </b>SAMA DENGAN
+
+				@elseif($data_ind->follow==-1)
+				<i class="fa fa-arrow-down"></i> TURUN ATAU SAMA DENGAN
+
+
+				@endif
+
+			</td>
 			<td>{{number_format($data_ind->target)}} {{$data_ind->satuan}}</td>
 
 
@@ -66,7 +81,7 @@
 				<td>{{number_format($d->jumlah_indikator_output)}} INDIKATOR</td>
 
 
-				<td><a href="" class="btn btn-primary btn-sm">DETAIL</a></td>
+				<td><a href="{{route('sipd.rkpd.d.indikator.kelkulasi.detail.sebaran',['tahun'=>$tahun,'kodepemda'=>$d->kodepemda,'id'=>$d->id_master])}}" class="btn btn-primary btn-sm">DETAIL</a></td>
 
 			</tr>
 		@endforeach
