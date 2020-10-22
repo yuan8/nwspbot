@@ -9,6 +9,7 @@ use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use DB;
 use Storage;
+use Hp;
 class DATA extends Controller
 {
     //
@@ -26,12 +27,26 @@ class DATA extends Controller
         if($request->ids){
           $ids=$request->ids;
         }
+          $pemetaan_data=[];
+
+          foreach (Hp::tipe_indikator() as $key => $value) {
+            $pemetaan_data[]="string_agg((case when (mi.tipe='".$value."') then concat(mi.id,'|||',mi.text) else null end),'|@|') as pemetaan_".$key;
+
+          }
+          
+          $query_pemetaan=("(select m.id,m.tipe,concat(m.nama,' (',m.target,' ',m.satuan,')',' - ','<small>',(select nama from public.master_urusan as u where u.id = m.id_urusan),' - ',(select nama from public.master_sub_urusan as su where su.id = m.id_sub_urusan),'</small>') as text from rkpd.master_peta_indikator as m) as mi ");
+  
+          $select= "max(i.kodedata) as kodedata,max(i.pagu) as pagu,'".($context==1?'OUTCOME':'OUTPUT')."' as jenis,i.id,max(i.target) as target,max(i.tolokukur) as tolokukur,max(i.satuan) as satuan,".implode(',', $pemetaan_data);
 
 
         if($context==1){
-          $data=DB::table('rkpd.master_'.$tahun.'_program_capaian as c')
-          ->where(['c.kodepemda'=>$kodepemda])
-          ->whereIn('c.id_program',$ids)
+          $data=DB::table('rkpd.master_'.$tahun.'_program_capaian as i')
+          ->where(['i.kodepemda'=>$kodepemda])
+          ->whereIn('i.id_program',$ids)
+          ->leftJoin('rkpd.master_'.$tahun.'_peta_indikator_program as pip','pip.kodedata','=','i.kodedata')
+          ->leftJoin(DB::raw($query_pemetaan),'mi.id','=','pip.id_master')
+          ->selectRaw($select)
+          ->groupBy('i.id')
           ->get();
           $jenis='OUTCOME';
           $kegiatan=DB::table('rkpd.master_'.$tahun.'_kegiatan')->whereIn('id',$request->k_ids)->first();
@@ -48,6 +63,10 @@ class DATA extends Controller
           $data=DB::table('rkpd.master_'.$tahun.'_kegiatan_indikator as i')
           ->where(['i.kodepemda'=>$kodepemda])
           ->whereIn('i.id_kegiatan',$ids)
+          ->leftJoin('rkpd.master_'.$tahun.'_peta_indikator_kegiatan as pip','pip.kodedata','=','i.kodedata')
+          ->leftJoin(DB::raw($query_pemetaan),'mi.id','=','pip.id_master')
+          ->selectRaw($select)
+          ->groupBy('i.id')
           ->get();
           $jenis='OUTPUT';
             $meta=[
@@ -60,6 +79,11 @@ class DATA extends Controller
 
 
 
+<<<<<<< HEAD
+=======
+
+  
+>>>>>>> fe211962b075a79a0dfe7adf511f36154f537728
 
         $return="";
 
@@ -70,6 +94,8 @@ class DATA extends Controller
       }
 
       public function api_master_indikator($tahun,$kodepemda,$tipe,Request $request){
+
+
         $data=DB::table('rkpd.master_peta_indikator as i')
           ->leftJoin('public.master_urusan as u','u.id','=','i.id_urusan')
           ->leftJoin('public.master_sub_urusan as su','su.id','=','i.id_sub_urusan')

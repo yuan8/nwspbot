@@ -20,8 +20,19 @@
       @endphp
          <tr >
             @foreach(Hp::tipe_indikator() as $keytipe=>$ti)
+
               <td style="width:200px;" class="align-top" ><p><b>Indikator {{$ti}}</b></p>
-              <select  onchange="pemetaan_indikator_update('{{$item['kodedata']}}',{{$context}},'{{$ti}}','ind-{{$item['id']}}')" class="form-control sel-2 ind-{{$item['id']}} {{str_replace(' ','_',$ti)}}" multiple=""  name="pemetaan_indikator[{{$item['id']}}][{{$ti}}][]"></select>
+              <select  onchange="pemetaan_indikator_update('{{$item['kodedata']}}',{{$context}},'{{$ti}}','ind-{{$item['id']}}')" class="form-control sel-2 ind-{{$item['id']}} {{str_replace(' ','_',$ti)}}" multiple=""  name="pemetaan_indikator[{{$item['id']}}][{{$ti}}][]">
+
+                @if(!empty($item['pemetaan_'.$keytipe]))
+                  @foreach(explode('|@|', $item['pemetaan_'.$keytipe]) as $p)
+                    @php
+                      $p=explode("|||", $p);
+                    @endphp
+                    <option value="{{$p[0]}}" selected="">{!!$p[1]!!}</option>
+                  @endforeach
+                @endif
+              </select>
               </td>
             @endforeach
            <td class="align-top">
