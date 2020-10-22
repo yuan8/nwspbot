@@ -186,6 +186,7 @@
         white-space: break-spaces;
         max-width: 100%;
         color: #222!important;
+        background-color: #f1f1f1!important;
     }
     .align-top{
         vertical-align: top!important;
