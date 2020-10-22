@@ -6,7 +6,7 @@
     @stack('css')
     @yield('css')
 
-   
+
 @stop
 
 
@@ -17,7 +17,7 @@
 ][(isset($side_active)?'fixed':config('adminlte.layout'))] : '') . (config('adminlte.collapse_sidebar') ? ' sidebar-collapse ' : ''))
 
 @section('body')
-   
+
     <div class="wrapper">
 
         <!-- Main Header -->
@@ -47,11 +47,11 @@
                 <!-- mini logo for sidebar mini 50x50 pixels -->
                 <span class="logo-mini">
                             <img src="{{asset('robot.png')}}" style="width: 45px;">
-                    
+
                 </span>
                 <!-- logo for regular state and mobile devices -->
                 <span class="logo-lg">
-                            <img src="{{asset('robot.png')}}" style="width: 35px;"> 
+                            <img src="{{asset('robot.png')}}" style="width: 35px;">
 
                     {!! config('adminlte.logo', '<b>Admin</b>LTE') !!}</span>
             </a>
@@ -137,7 +137,14 @@
 
             <!-- Main content -->
             <section class="content">
+              	@if(isset($page_block))
+                <div class="box box-solid box-danger bg-danger">
+                  <div class="box-body bg-danger">
+                    <p><b>Halaman Tidak Dapat di Akses</b> </p>
+                  </div>
 
+                </div>
+                @endif
                 @yield('content')
 
             </section>
@@ -177,7 +184,7 @@
     table  tr td,table tr th{
         font-size: 11px;
         vertical-align: middle!important;
-    } 
+    }
     .modal-xl{
         max-width: 98%;
         width: 90%!important;

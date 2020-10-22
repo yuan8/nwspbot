@@ -1,6 +1,7 @@
 @extends('adminlte::page',['side_active'=>Hp::menus('sipd')])
 
 @section('content')
+@if(!isset($page_block))
 <div class="box box-solid">
 	<div class="box-header with-border">
 		<h5 class="title">DOWNLOAD DATA</h5>
@@ -61,13 +62,14 @@
 			</div>
 			<div class="col-md-2">
 				<p><b>ACTION</b></p>
-				<button type="submit" class="btn btn-primary btn-sm">DOWNLOAD</button>
+				<button type="submit" class="btn btn-primary btn-xs">DOWNLOAD</button>
 			</div>
 
 		</div>
 		</form>
 	</div>
 </div>
+@endif
 <div class="box">
 	<div class="box-header with-border">
 		<div  class="float-left">
@@ -94,10 +96,11 @@
 
 						@endphp
 					</select>
-
+					@if(!isset($page_block))
 					<div class="input-group-btn">
-					<a {{isset(($page_block))?'area-disabled="true"':''}} href="{{route('sipd.rkpd.list.update',['tahun'=>$tahun])}}" class="btn btn-success  btn-sm{{isset(($page_block))?'disabled':''}}">UPDATE REKAP RKPD {{$tahun}}</a>
+					<a {{isset(($page_block))?'area-disabled="true"':''}} href="{{route('sipd.rkpd.list.update',['tahun'=>$tahun])}}" class="btn btn-success   {{isset(($page_block))?'disabled':''}}">UPDATE REKAP RKPD {{$tahun}}</a>
 					</div>
+					@endif
 
 				</div>
 
@@ -139,32 +142,35 @@
 					<td><b>{{$d->nama_pemda}}</b></td>
 					<td>{{Hp::status_rkpd($d->status)}}</td>
 					<td> Rp. {{number_format($d->pagu)}}
-
 						@if(!$d->rkpd_match)
 						/ Rp. {{number_format($d->pagu_store)}}
 						@endif
 					</td>
+					<td>BANGDA SIPD II</td>
+
+					<td>{{$d->tipe_pengambilan}}</td>
+					<td></td>
 					<td>{{\Carbon\Carbon::parse($d->last_date)->format('d F Y h:i A')}}</td>
 					<td>{{$d->rkpd_match?'SESUAI':'BELUM'}}</td>
-					<td>
+					<td style="width:250px;">
 						<div class="btn-group">
 						@if(!$d->rkpd_match)
-							<a href="{{route('sipd.rkpd.data.update',['tahun'=>$tahun,'kodepemda'=>$d->kodepemda,'status'=>$d->status,'transactioncode'=>$d->transactioncode])}}" class="btn btn-success btn-sm" >
+							<a href="{{route('sipd.rkpd.data.update',['tahun'=>$tahun,'kodepemda'=>$d->kodepemda,'status'=>$d->status,'transactioncode'=>$d->transactioncode])}}" class="btn btn-success btn-xs" >
 							UPDATE
 
 						</a>
 
 
 						@elseif($d->rkpd_match)
-						<button onclick="force('{{route('sipd.rkpd.data.update',['tahun'=>$tahun,'kodepemda'=>$d->kodepemda,'status'=>$d->status,'transactioncode'=>$d->transactioncode])}}','')" class="btn btn-warning btn-sm" >
+						<button onclick="force('{{route('sipd.rkpd.data.update',['tahun'=>$tahun,'kodepemda'=>$d->kodepemda,'status'=>$d->status,'transactioncode'=>$d->transactioncode])}}','')" class="btn btn-warning btn-xs" >
 							UPDATE FORCE
 						</button>
 
 						@endif
 						@if($d->attemp or $d->rkpd_match)
-								<a href="{{route('sipd.rkpd.json',['tahun'=>$tahun,'json_id'=>$d->kodepemda.'.'.$d->status.'.'.$d->transactioncode])}}" class="btn btn-primary  btn-sm">JSON</a>
-								<a href="{{route('sipd.rkpd.data.download',['tahun'=>$tahun,'kodepemda'=>$d->kodepemda])}}" class="btn btn-info  btn-sm"><i class="fa fa-download"></i> .</a>
-								<a href="{{route('sipd.rkpd.pemetaan',['tahun'=>$tahun,'kodepemda'=>$d->kodepemda])}}" class="btn btn-navy bg-navy btn-sm">PEMETAAN</a>
+								<a href="{{route('sipd.rkpd.json',['tahun'=>$tahun,'json_id'=>$d->kodepemda.'.'.$d->status.'.'.$d->transactioncode])}}" class="btn btn-primary  btn-xs">JSON</a>
+								<a href="{{route('sipd.rkpd.data.download',['tahun'=>$tahun,'kodepemda'=>$d->kodepemda])}}" class="btn btn-info  btn-xs"><i class="fa fa-download"></i> .</a>
+								<a href="{{route('sipd.rkpd.pemetaan',['tahun'=>$tahun,'kodepemda'=>$d->kodepemda])}}" class="btn btn-navy bg-navy btn-xs">PEMETAAN</a>
 						@endif
 
 						</div>
@@ -176,6 +182,7 @@
 			</tbody>
 			<thead class="bg-navy">
 				<form id="form-search" method="get" action="{{url()->full()}}">
+					@if(!isset($page_block))
 						<tr>
 				<th>NO</th>
 				<th colspan="2">
@@ -194,7 +201,7 @@
 						@endphp
 					</select>
 				</th>
-				<th colspan="2"></th>
+				<th colspan="5"></th>
 				<th>
 					<select name="match" class="form-control" onchange="$('#form-search').submit()">
 						<option value="">SEMUA</option>
@@ -205,6 +212,7 @@
 				<th></th>
 
 			</tr>
+			@endif
 				</form>
 				<tr>
 				<th>NO</th>
@@ -212,6 +220,9 @@
 				<th>NAMAPEMDA</th>
 				<th>STATUS</th>
 				<th>PAGU</th>
+				<th>SUMBER DATA</th>
+				<th>METODE PENGAMBILAN DATA</th>
+				<th>METODE PENKODEAN</th>
 				<th>UPDATED RKPD AT</th>
 				<th>KECOCOKAN</th>
 				<th>ACTION</th>

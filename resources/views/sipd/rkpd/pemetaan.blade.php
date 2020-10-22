@@ -12,7 +12,7 @@
 
    function change_pemetaan(context,ids,data){
       var data_json={};
-      data_json['id']=ids.split(',');
+      data_json['id'].concat(ds.split(','));
       data_json['data']=data;
 
       if(context=='U'){
@@ -32,20 +32,20 @@
         $('[name="kegiatan['+ids+'][id_sub_urusan]"]').val(data.id_urusan+"||").trigger('change');
 
       }
-      
+
 
 
       if(context=='S'){
 
       if(data.id_urusan){
-         
+
          $.post('{{route('api.sipd.rkpd.pemetaan.update.kegiatan',['tahun'=>$tahun,'kodepemda'=>$daerah->id])}}',data_json,function(res){
             console.log(res);
           });
         }
 
       }
-      
+
 
 
 
@@ -114,7 +114,7 @@
         </tr>
       </thead>
       <tbody id="content-pemetaan">
-       
+
       </tbody>
 
     </table>
@@ -143,7 +143,7 @@
 
       $.post(url,{ids:ids.split(','),k_ids:k_ids.split(',')},function(res){
          $('#pemetaan-indikator #content-pemetaan-indikator').html(res);
-          
+
       });
     }else{
       $('#pemetaan-indikator #content-pemetaan-indikator').html('<h5 class=text-center>MOHON MELAKUKAN PEMETAAN URUSAN DAN SUB URUSAN TERLEBIH DAHULU</h5>');
@@ -164,7 +164,7 @@
         <h4 class="modal-title">PEMETAAN INDIKATOR PROGRAM</h4>
       </div>
       <div class="modal-body table-responsive" id="content-pemetaan-indikator">
-     
+
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -175,7 +175,7 @@
 </div>
 
 <script type="text/javascript">
-  
+
   var total_data={{$data->count}};
   var attemp_data=1;
   var data_show=0;
@@ -198,7 +198,7 @@
       }
 
 
-   
+
 
     $.get('{{route('sipd.rkpd.pemetaan.data',['tahun'=>$tahun,'kodepemda'=>$kodepemda])}}',data_request,function(res){
         $('#content-pemetaan').append(res.data);
@@ -222,7 +222,7 @@
 
 
     });
-   
+
   }
 
   $(function(){
@@ -255,5 +255,3 @@
 
 
 @stop
-
-

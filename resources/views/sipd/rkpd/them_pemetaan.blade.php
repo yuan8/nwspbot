@@ -23,7 +23,7 @@
 
 	  <td style="width:250px;">
 	    <select class="form-control select2-init-{{$page}}" id="{{'urusan'.str_replace(',','_', $d->ids)}}" name="kegiatan[{{str_replace(',','_',$d->ids)}}][id_urusan]" onchange="change_pemetaan('U','{{$d->ids}}',({id_urusan:this.value,id_sub_urusan:null}))">
-	      <option value="">-</option>
+	      <option value="0">-</option>
 	      @foreach($urusan as $u)
 	        <option value="{{$u->id}}" {{$d->id_urusan==$u->id?'selected':''}}>{{$u->nama}}</option>
 	      @endforeach

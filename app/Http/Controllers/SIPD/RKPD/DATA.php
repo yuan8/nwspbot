@@ -37,12 +37,12 @@ class DATA extends Controller
           $kegiatan=DB::table('rkpd.master_'.$tahun.'_kegiatan')->whereIn('id',$request->k_ids)->first();
           $meta=[
             'id_urusan'=>$kegiatan->id_urusan,
-            'id_sub_urusan'=>null,        
+            'id_sub_urusan'=>null,
           ];
 
 
         }else if($context==2){
-          
+
           $kegiatan=DB::table('rkpd.master_'.$tahun.'_kegiatan')->whereIn('id',$ids)->first();
 
           $data=DB::table('rkpd.master_'.$tahun.'_kegiatan_indikator as i')
@@ -52,19 +52,19 @@ class DATA extends Controller
           $jenis='OUTPUT';
             $meta=[
             'id_urusan'=>$kegiatan->id_urusan,
-            'id_sub_urusan'=>$kegiatan->id_sub_urusan,        
+            'id_sub_urusan'=>$kegiatan->id_sub_urusan,
           ];
 
 
         }
 
 
-  
+
 
         $return="";
-        
+
         return view('sipd.rkpd.them_indikator_list')->with(['context'=>$context,'kodepemda'=>$kodepemda,'tahun'=>$tahun,'items'=>$data,'jenis'=>$jenis,'meta'=>$meta])->render();
-        
+
 
 
       }
@@ -93,7 +93,12 @@ class DATA extends Controller
 
 
       public function update_pemetaan_kegiatan($tahun,$kodepemda,Request $request){
-        $up= DB::table('rkpd.master_'.$tahun.'_kegiatan')->whereIn('id',$request->id)->update($request->data);
+        $data=(array)($request->data);
+        if($data['id_urusan']==0){
+          $data['id_urusan']=null;
+        }
+        
+        $up= DB::table('rkpd.master_'.$tahun.'_kegiatan')->whereIn('id',$request->id)->update($data);
         if($up){
 
             $data=DB::table('rkpd.master_'.$tahun.'_kegiatan')->whereIn('id',(array)$request->id)->get();
@@ -127,7 +132,7 @@ class DATA extends Controller
 
       public function update_pemetaan_indikator($tahun,$kodepemda,Request $request){
         if($request->id){
-           
+
             $data_save=[
                   'kegiatan'=>[],
                   'indikator_kegiatan'=>[],
@@ -161,7 +166,7 @@ class DATA extends Controller
 
 
             }else{
-              
+
                 if(is_array($request->data_ids)){
                    foreach($request->data_ids as $id_master){
                       $data=DB::table('rkpd.master_'.$tahun.'_peta_indikator_kegiatan')->insertOrIgnore(
@@ -292,7 +297,7 @@ class DATA extends Controller
           'k.kodepemda'=>$kodepemda,
           'k.tahun'=>$tahun
         ])
-        ->groupBy('uraikegiatan') 
+        ->groupBy('uraikegiatan')
         ->join('rkpd.master_'.$tahun.'_program as p','p.id','=','k.id_program')
 
         ->selectRaw("
@@ -334,7 +339,7 @@ class DATA extends Controller
       set_time_limit(-1);
       ini_set('memory_limit', '8095M');
       $name=date('Y-m-d-h-i-s');
-    
+
       $name.='-data-rekap.xlsx';
 
 
