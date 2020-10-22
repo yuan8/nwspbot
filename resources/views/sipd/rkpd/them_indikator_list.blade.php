@@ -19,9 +19,9 @@
       $item=(array)$item;
       @endphp
          <tr >
-            @foreach(Hp::tipe_indikator() as $ti)
+            @foreach(Hp::tipe_indikator() as $keytipe=>$ti)
               <td style="width:200px;" class="align-top" ><p><b>Indikator {{$ti}}</b></p>
-              <select onchange="pemetaan_indikator_update({{$item['id']}},{{$context}},'{{$ti}}',this.value)" class="form-control {{str_replace(' ','_',$ti)}}" multiple=""  name="pemetaan_indikator[{{$item['id']}}][{{$ti}}]"></select>
+              <select  onchange="pemetaan_indikator_update('{{$item['kodedata']}}',{{$context}},'{{$ti}}','ind-{{$item['id']}}')" class="form-control sel-2 ind-{{$item['id']}} {{str_replace(' ','_',$ti)}}" multiple=""  name="pemetaan_indikator[{{$item['id']}}][{{$ti}}][]"></select>
               </td>
             @endforeach
            <td class="align-top">
@@ -47,9 +47,12 @@
     }
 
     setTimeout(function(){
-         @foreach(Hp::tipe_indikator() as $ti)
+        $('.sel-2').on('select2-removing', function (e) {
+            $(this).trigger('change');
+        });
+         @foreach(Hp::tipe_indikator() as $keytipe=>$ti)
             $('.{{str_replace(' ','_',$ti)}}').select2({
-              "maximumSelectionLength":1,
+              "maximumSelectionLength":4,
              "ajax": {
               "delay": 250,
                 "url": "{{route('api.sipd.rkpd.pemetaan.api.get.master.indikator',['tahun'=>$tahun,'kodepemda'=>$kodepemda,'context'=>$ti])}}",

@@ -127,29 +127,7 @@ class DATA extends Controller
 
       public function update_pemetaan_indikator($tahun,$kodepemda,Request $request){
         if($request->id){
-            $table='';
-            switch ($request->tipe) {
-              case 'RPJMN':
-                $table='rpjmn';
-                # code...
-                break;
-              case 'SPM':
-                $table='spm';
-                # code...
-                break;
-              case 'SDGS':
-                $table='sdgs';
-                # code...
-                break;
-              case 'LAINYA':
-                $table='lainya';
-                # code...
-                break;
-              
-              default:
-                # code...
-                break;
-            }
+           
             $data_save=[
                   'kegiatan'=>[],
                   'indikator_kegiatan'=>[],
@@ -161,42 +139,56 @@ class DATA extends Controller
               }
 
             if($request->context==1){
-                $data=DB::table('rkpd.master_'.$tahun.'_program_capaian')->where(['kodepemda'=>$kodepemda,'id'=>$request->id])->update([
-                  $table=>$request->value
-                ]);
 
-                if($data){
-                  $data=DB::table('rkpd.master_'.$tahun.'_program_capaian')->where(['kodepemda'=>$kodepemda,'id'=>$request->id])->first();
-                  if($data){
-                    $data_save['indikator_program'][$data->kodedata]=[
-                      'rpjmn'=>$data->rpjmn,
-                      'spm'=>$data->spm,
-                      'lainya'=>$data->lainya,
-                    ];
-                  }
+                if(is_array($request->data_ids)){
+                   foreach($request->data_ids as $id_master){
+                  $data=DB::table('rkpd.master_'.$tahun.'_peta_indikator_program')->insertOrIgnore(
+                       [
+                        'kodedata'=>$request->id,
+                        'kodepemda'=>$kodepemda,
+                        'id_master'=>$id_master,
+                        'tahun'=>$tahun
+                      ]
+                  );
+                 }
+
+                $data=DB::table('rkpd.master_'.$tahun.'_peta_indikator_program')->where(['kodedata'=>$request->id,'kodepemda'=>$kodepemda,'tahun'=>$tahun])->whereNotin('id_master',$request->data_ids)->delete();
+                }else{
+                     $data=DB::table('rkpd.master_'.$tahun.'_peta_indikator_program')->where(['kodedata'=>$request->id,'kodepemda'=>$kodepemda,'tahun'=>$tahun])->delete();
                 }
+                 $data=DB::table('rkpd.master_'.$tahun.'_peta_indikator_program')->where(['kodedata'=>$request->id,'kodepemda'=>$kodepemda,'tahun'=>$tahun])->get();
+                 $data_save['indikator_program'][$request->id]=$data;
+
 
             }else{
-                $data=DB::table('rkpd.master_'.$tahun.'_kegiatan_indikator')->where(['kodepemda'=>$kodepemda,'id'=>$request->id])->update([
-                  $table=>$request->value
-                ]);
+              
+                if(is_array($request->data_ids)){
+                   foreach($request->data_ids as $id_master){
+                      $data=DB::table('rkpd.master_'.$tahun.'_peta_indikator_kegiatan')->insertOrIgnore(
+                           [
+                            'kodedata'=>$request->id,
+                            'kodepemda'=>$kodepemda,
+                            'id_master'=>$id_master,
+                            'tahun'=>$tahun
+                          ]
+                      );
+                    }
 
-                if($data){
-                  $data=DB::table('rkpd.master_'.$tahun.'_kegiatan_indikator')->where(['kodepemda'=>$kodepemda,'id'=>$request->id])->first();
-                  if($data){
-                    $data_save['indikator_kegiatan'][$data->kodedata]=[
-                      'rpjmn'=>$data->rpjmn,
-                      'spm'=>$data->spm,
-                      'lainya'=>$data->lainya,
-                    ];
-                  }
+                    $data=DB::table('rkpd.master_'.$tahun.'_peta_indikator_kegiatan')->where(['kodedata'=>$request->id,'kodepemda'=>$kodepemda,'tahun'=>$tahun])->whereNotin('id_master',$request->data_ids)->delete();
+                }else{
+                     $data=DB::table('rkpd.master_'.$tahun.'_peta_indikator_kegiatan')->where(['kodedata'=>$request->id,'kodepemda'=>$kodepemda,'tahun'=>$tahun])->delete();
                 }
+                 $data=DB::table('rkpd.master_'.$tahun.'_peta_indikator_kegiatan')->where(['kodedata'=>$request->id,'kodepemda'=>$kodepemda,'tahun'=>$tahun])->get();
+                 $data_save['indikator_kegiatan'][$request->id]=$data;
+
             }
 
             if($data_save){
                 Storage::put('BOT/SIPD/RKPD/'.$tahun.'/JSON-PEMETAAN/'.$kodepemda.'.json',json_encode($data_save));
                 return json_encode($data,true);
             }
+
+            return 'peta '.$request->id.' done';
           }
       }
 

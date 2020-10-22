@@ -364,7 +364,7 @@ class GETDATA extends Controller
 		static::$kodebidang=$data['kodebidang'];
 
 
-		$kodedata=static::$tahun.'.'.static::$kodepemda.'.'.static::$kodebidang.'.'.static::$kodeskpd.static::$kodeprogram;
+		$kodedata=static::$tahun.'.'.static::$kodepemda.'.'.static::$kodebidang.'.'.static::$kodeskpd.'.'.static::$kodeprogram;
 		$kodedata=static::kodedata($kodedata,$key);
 
 		static::$listingcode[]=$kodedata;
@@ -401,7 +401,7 @@ class GETDATA extends Controller
 			static::$pagutotal+=(float)$data['pagu'];
 		}
 
-		$kodedata=static::$tahun.'.'.static::$kodepemda.'.'.static::$kodebidang.'.'.static::$kodeskpd.static::$kodeprogram.static::$kodekegiatan;
+		$kodedata=static::$tahun.'.'.static::$kodepemda.'.'.static::$kodebidang.'.'.static::$kodeskpd.'.'.static::$kodeprogram.'.'.static::$kodekegiatan;
 
 		$kodedata=static::kodedata($kodedata,$key);
 
@@ -439,7 +439,7 @@ class GETDATA extends Controller
 	static function kegiatan_sumberdana($data,$key){
 
 
-		$kodedata=static::$tahun.'.'.static::$kodepemda.'.'.static::$kodebidang.'.'.static::$kodeskpd.static::$kodeprogram.static::$kodekegiatan.'.S.'.($key+1);
+		$kodedata=static::$tahun.'.'.static::$kodepemda.'.'.static::$kodebidang.'.'.static::$kodeskpd.'.'.static::$kodeprogram.'.'.static::$kodekegiatan.'.S.'.($data['sumberdana']);
 
 		static::$kodesumberdana=$kodedata;
 		
@@ -469,7 +469,7 @@ class GETDATA extends Controller
 	static function sub_kegiatan_sumberdana($data,$key){
 
 
-		$kodedata=static::$tahun.'.'.static::$kodepemda.'.'.static::$kodebidang.'.'.static::$kodeskpd.static::$kodeprogram.static::$kodekegiatan.static::$kodesubkegiatan.'.S.'.($key+1);
+		$kodedata=static::$tahun.'.'.static::$kodepemda.'.'.static::$kodebidang.'.'.static::$kodeskpd.'.'.static::$kodeprogram.'.'.static::$kodekegiatan.'.'.static::$kodesubkegiatan.'.S.'.($data['sumberdana']);
 
 		static::$kodesumberdana_sub=$kodedata;
 
@@ -501,7 +501,7 @@ class GETDATA extends Controller
 	static function sub_kegiatan($data,$key){
 		static::$kodesubkegiatan=$data['kodesubkegiatan'];
 
-		$kodedata=static::$tahun.'.'.static::$kodepemda.'.'.static::$kodebidang.'.'.static::$kodeskpd.static::$kodeprogram.static::$kodekegiatan.static::$kodesubkegiatan;
+		$kodedata=static::$tahun.'.'.static::$kodepemda.'.'.static::$kodebidang.'.'.static::$kodeskpd.'.'.static::$kodeprogram.'.'.static::$kodekegiatan.'.'.static::$kodesubkegiatan;
 
 
 		$kodedata=static::kodedata($kodedata,$key);
@@ -536,7 +536,7 @@ class GETDATA extends Controller
 	static function capaian($data,$key){
 
 
-		$kodedata=static::$tahun.'.'.static::$kodepemda.'.'.static::$kodebidang.'.'.static::$kodeskpd.static::$kodeprogram.'.'.($key+1);
+		$kodedata=static::$tahun.'.'.static::$kodepemda.'.'.static::$kodebidang.'.'.static::$kodeskpd.'.'.static::$kodeprogram.'.I.'.$data['kodeindikator'];
 
 		static::$kodecapaian=$kodedata;
 
@@ -574,7 +574,7 @@ class GETDATA extends Controller
 
 	static function indikator($data,$key){
 
-		$kodedata=static::$tahun.'.'.static::$kodepemda.'.'.static::$kodebidang.'.'.static::$kodeskpd.static::$kodeprogram.static::$kodekegiatan.static::$kodesubkegiatan.'.'.($key+1);
+		$kodedata=static::$tahun.'.'.static::$kodepemda.'.'.static::$kodebidang.'.'.static::$kodeskpd.'.'.static::$kodeprogram.'.'.static::$kodekegiatan.'.'.static::$kodesubkegiatan.'.I.'.$data['kodeindikator'];
 
 		static::$kodeindikator=$kodedata;
 
@@ -614,7 +614,7 @@ class GETDATA extends Controller
 
 	static function indikator_sub_kegiatan($data,$key){
 
-		$kodedata=static::$tahun.'.'.static::$kodepemda.'.'.static::$kodebidang.'.'.static::$kodeskpd.static::$kodeprogram.static::$kodekegiatan.static::$kodesubkegiatan.'.'.($key+1);
+		$kodedata=static::$tahun.'.'.static::$kodepemda.'.'.static::$kodebidang.'.'.static::$kodeskpd.'.'.static::$kodeprogram.'.'.static::$kodekegiatan.'.'.static::$kodesubkegiatan.'.I.'.$data['kodeindikator'];
 
 		static::$kodeindikatorsubkegiatan=$kodedata;
 

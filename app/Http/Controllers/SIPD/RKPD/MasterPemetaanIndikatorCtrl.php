@@ -79,7 +79,7 @@ class MasterPemetaanIndikatorCtrl extends Controller
     		'target'=>(float)($request->target),
     		'satuan'=>strtoupper($request->satuan),
     		'deskripsi'=>$request->deskripsi,
-    		'follow'=>$request->follow==null?null:((int)$request->follow),
+    		'follow'=>!isset($request->follow)?null:((int)$request->follow),
     		'created_at'=>Carbon::now(),
     		'updated_at'=>Carbon::now(),
     	]);
@@ -132,7 +132,7 @@ class MasterPemetaanIndikatorCtrl extends Controller
 	    		'target'=>(float)($request->target),
 	    		'satuan'=>strtoupper($request->satuan),
 	    		'deskripsi'=>$request->deskripsi,
-    			'follow'=>$request->follow==null?null:((int)$request->follow),
+    			'follow'=>!isset($request->follow)?null:((int)$request->follow),
 
 
 	    		'updated_at'=>Carbon::now(),

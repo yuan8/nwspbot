@@ -57,7 +57,7 @@
 						<td>
 							@if($d->follow==1)
 							<i class="fa fa-arrow-up"></i> NAIK ATAU SAMA DENGAN
-							@elseif($d->follow==0)
+							@elseif($d->follow==99)
 							<i class="fa fa-equality"></i> <b>= </b>SAMA DENGAN
 
 							@elseif($d->follow==-1)
