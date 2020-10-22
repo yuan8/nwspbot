@@ -4,7 +4,7 @@
 
 <div class="row " id="list-bot">
 
-    
+
 
 </div>
 
@@ -26,6 +26,6 @@
 
 
 
-  
+
 </script>
 @stop
