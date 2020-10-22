@@ -14,31 +14,31 @@ class SipdIndikatorAddTable extends Migration
     public function up()
     {
         //
-         Schema::table('rkpd.master_2021_kegiatan_indikator', function($table) {
-                //   $table->bigInteger('rpjmn')->nullable();
+         Schema::table('rkpd.master_2020_kegiatan_indikator', function($table) {
+                  $table->bigInteger('rpjmn')->nullable();
 
-                // $table->bigInteger('spm')->nullable();
-                // $table->bigInteger('sdgs')->nullable();
-                // $table->bigInteger('lainya')->nullable();
+                $table->bigInteger('spm')->nullable();
+                $table->bigInteger('sdgs')->nullable();
+                $table->bigInteger('lainya')->nullable();
 
-                 // $table->double('target_peneyesuaian',25,3)->nullable();
-
-        });
-         Schema::table('rkpd.master_2021_subkegiatan_indikator', function($table) {
-                //  $table->bigInteger('rpjmn')->nullable();
-                // $table->bigInteger('spm')->nullable();
-                // $table->bigInteger('sdgs')->nullable();
-                // $table->bigInteger('lainya')->nullable();     
-                 // $table->double('target_peneyesuaian',25,3)->nullable();
+                 $table->double('target_peneyesuaian',25,3)->nullable();
 
         });
-        Schema::table('rkpd.master_2021_program_capaian', function($table) {
-                //  $table->bigInteger('rpjmn')->nullable();
-                // $table->bigInteger('spm')->nullable();
-                // $table->bigInteger('sdgs')->nullable();
-                // $table->bigInteger('lainya')->nullable();
-                 // $table->double('target_peneyesuaian',25,3)->nullable();
-            
+         Schema::table('rkpd.master_2020_subkegiatan_indikator', function($table) {
+                 $table->bigInteger('rpjmn')->nullable();
+                $table->bigInteger('spm')->nullable();
+                $table->bigInteger('sdgs')->nullable();
+                $table->bigInteger('lainya')->nullable();
+                 $table->double('target_peneyesuaian',25,3)->nullable();
+
+        });
+        Schema::table('rkpd.master_2020_program_capaian', function($table) {
+                 $table->bigInteger('rpjmn')->nullable();
+                $table->bigInteger('spm')->nullable();
+                $table->bigInteger('sdgs')->nullable();
+                $table->bigInteger('lainya')->nullable();
+                 $table->double('target_peneyesuaian',25,3)->nullable();
+
         });
 
 
