@@ -213,6 +213,7 @@ class STOREDATA extends Controller
 					[
 						'kodepemda'=>$kodepemda,
 						'tahun'=>$tahun,
+            'tipe_pengambilan'=>$pagu_rkpd['tipe_pengambilan'],
 						'transactioncode'=>$pagu_rkpd['transactioncode'],
 						'last_date'=>$pagu_rkpd['last_date'],
 						'updated_at'=>Carbon::now(),
@@ -237,6 +238,7 @@ class STOREDATA extends Controller
 		[
 				'kodepemda'=>$kodepemda,
 				'tahun'=>$tahun,
+        'tipe_pengambilan'=>$pagu_rkpd['tipe_pengambilan'],
 				'transactioncode'=>$pagu_rkpd['transactioncode'],
 				'last_date'=>$pagu_rkpd['last_date'],
 				'updated_at'=>Carbon::now(),

@@ -233,6 +233,7 @@ class LISTDATA extends Controller
     		 foreach ($data['data'] as $key => $d) {
     		 	$status=0;
 
+
     		 	switch (1) {
     		 		case (int)$d['final']:
     		 			$status=5;
@@ -276,7 +277,7 @@ class LISTDATA extends Controller
 
 
     		 	$kodar=str_replace('00', '', $d['kodepemda']);
-                $reco=array('kodepemda'=>$kodar,'tahun'=>$tahun,'status'=>$status,'updated_at'=>Carbon::now(),'last_date'=>$tanggal,'pagu'=>(float)$pagu,'matches'=>0,'transactioncode'=>'1'.$status.Carbon::parse($tanggal)->format('Ymdh'),'attemp'=>0);
+        $reco=array('tipe_pengambilan'=>$d['modepenggunaan'],'kodepemda'=>$kodar,'tahun'=>$tahun,'status'=>$status,'updated_at'=>Carbon::now(),'last_date'=>$tanggal,'pagu'=>(float)$pagu,'matches'=>0,'transactioncode'=>'1'.$status.Carbon::parse($tanggal)->format('Ymdh'),'attemp'=>0);
 
     		 	$data_return[]=$reco;
 
@@ -286,7 +287,7 @@ class LISTDATA extends Controller
                 	'tahun'=>$tahun
                 	]
                 	,$reco);
-                
+
                 $data_pemda=(array)DB::table('rkpd.master_'.$tahun.'_status_data')->where('kodepemda',$kodar)->first();
 
                 if($data_pemda){

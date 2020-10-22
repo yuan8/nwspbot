@@ -48,6 +48,8 @@ class InitCtrl extends Controller
                     $table->integer('tahun');
                     $table->integer('status');
                     $table->integer('attemp')->default(0);
+                    $table->text('tipe_pengambilan')->nullable();
+                    $table->string('method')->nullable();
                     $table->double('pagu',25,3)->default(0);
                     $table->dateTime('last_date')->nullable();
                     $table->bigInteger('transactioncode')->nullable();
@@ -64,19 +66,21 @@ class InitCtrl extends Controller
                     $table->string('kodepemda',4)->unique();
                     $table->integer('tahun');
                     $table->integer('status');
+                    $table->text('tipe_pengambilan')->nullable();
+                    $table->string('method')->nullable();
                     $table->double('pagu',25,3)->default(0);
                     $table->dateTime('last_date')->nullable();
                     $table->bigInteger('transactioncode')->nullable();
                     $table->boolean('matches')->nullable();
                     $table->timestamps();
-                   
-                   
+
+
               });
         }
     }
 
     static function bidang($tahun){
-		
+
 		  $schema='rkpd.';
 
 
@@ -103,7 +107,7 @@ class InitCtrl extends Controller
 	}
 
 	static function program($tahun){
-		
+
 		  $schema='rkpd.';
 
          if(!Schema::connection('pgsql')->hasTable($schema.'master_'.$tahun.'_program')){
@@ -162,11 +166,11 @@ class InitCtrl extends Controller
                 $table->double('pagu_p',25,3)->default(0);
                 $table->longText('target_n1')->nullable();
                 $table->double('pagu_n1',25,3)->default(0);
-            	$table->integer('jenis')->nullable();
-                $table->bigInteger('rpjmn')->nullable();
-                $table->bigInteger('spm')->nullable();
-                $table->bigInteger('sdgs')->nullable();
-                $table->bigInteger('lainya')->nullable();
+            	   $table->integer('jenis')->nullable();
+                $table->double('target_penyesuaian',25,3)->nullable();
+                $table->boolean('cal')->default(false);
+
+
 
                 $table->bigInteger('transactioncode')->nullable();
             		$table->timestamps();
@@ -212,7 +216,7 @@ class InitCtrl extends Controller
       }
 
 
-	
+
 
 	static function kegiatan($tahun){
 
@@ -265,8 +269,8 @@ class InitCtrl extends Controller
 
         if(!Schema::connection('pgsql')->hasTable($schema.'master_'.$tahun.'_kegiatan_indikator')){
               Schema::connection('pgsql')->create($schema.'master_'.$tahun.'_kegiatan_indikator',function(Blueprint $table) use ($schema,$tahun){
-                 
-         
+
+
 		                $table->bigIncrements('id');
 		            	$table->integer('status')->default(0);
 		                $table->text('kodedata')->unique();
@@ -294,11 +298,8 @@ class InitCtrl extends Controller
 		                $table->longText('target_n1')->nullable();
 		                $table->double('pagu_n1',25,3)->default(0);
 		            	$table->integer('jenis')->nullable();
-                        $table->bigInteger('rpjmn')->nullable();
-                        $table->bigInteger('spm')->nullable();
-                        $table->bigInteger('sdgs')->nullable();
-                        $table->bigInteger('lainya')->nullable();
-
+                        $table->double('target_penyesuaian',25,3)->nullable();
+                        $table->boolean('cal')->default(false);
 
 
 
@@ -309,17 +310,17 @@ class InitCtrl extends Controller
 				      	$table->foreign('id_kegiatan')
 						      ->references('id')->on($schema.'master_'.$tahun.'_kegiatan')
 						      ->onDelete('cascade')->onUpdate('cascade');
-						  
+
 
 						$table->foreign('id_bidang')
 						      ->references('id')->on($schema.'master_'.$tahun.'_bidang')
 						      ->onDelete('cascade')->onUpdate('cascade');
-						  
+
 
 				      	$table->foreign('id_program')
 						      ->references('id')->on($schema.'master_'.$tahun.'_program')
 						      ->onDelete('cascade')->onUpdate('cascade');
-	
+
 		      });
          }
 
@@ -367,7 +368,7 @@ class InitCtrl extends Controller
 
 
 	static function kegiatan_lokasi($tahun){
-	
+
 		$schema='rkpd.';
 
         if(!Schema::connection('pgsql')->hasTable($schema.'master_'.$tahun.'_kegiatan_lokasi')){
@@ -387,7 +388,7 @@ class InitCtrl extends Controller
                     $table->string('kodelokasi')->nullable();
                     $table->text('lokasi')->nullable();
                     $table->longText('detaillokasi')->nullable();
-             
+
                     $table->bigInteger('transactioncode')->nullable();
             		$table->timestamps();
 
@@ -412,7 +413,7 @@ class InitCtrl extends Controller
 
 
 	static function kegiatan_prioritas($tahun){
-	
+
 		$schema='rkpd.';
 
         if(!Schema::connection('pgsql')->hasTable($schema.'master_'.$tahun.'_kegiatan_prioritas')){
@@ -444,7 +445,7 @@ class InitCtrl extends Controller
 
 
     static function peta_indikator_kegiatan($tahun){
-    
+
         $schema='rkpd.';
 
         if(!Schema::connection('pgsql')->hasTable($schema.'master_'.$tahun.'_peta_indikator_kegiatan')){
@@ -456,15 +457,15 @@ class InitCtrl extends Controller
                     $table->bigInteger('id_master');
                     $table->unique(['kodepemda','kodedata','id_master','tahun']);
                 });
-                    
-                   
+
+
          }
 
 
     }
 
      static function peta_indikator_program($tahun){
-    
+
         $schema='rkpd.';
 
         if(!Schema::connection('pgsql')->hasTable($schema.'master_'.$tahun.'_peta_indikator_program')){
@@ -476,14 +477,14 @@ class InitCtrl extends Controller
                     $table->bigInteger('id_master');
                     $table->unique(['kodepemda','kodedata','id_master','tahun']);
                 });
-                                       
+
          }
 
 
     }
 
     static function peta_indikator_sub_kegiatan($tahun){
-    
+
         $schema='rkpd.';
 
         if(!Schema::connection('pgsql')->hasTable($schema.'master_'.$tahun.'_peta_indikator_sub_kegiatan')){
@@ -495,7 +496,7 @@ class InitCtrl extends Controller
                     $table->bigInteger('id_master');
                     $table->unique(['kodepemda','kodedata','id_master','tahun']);
                 });
-                                       
+
          }
 
 
@@ -543,7 +544,7 @@ class InitCtrl extends Controller
 				        ->onDelete('cascade')->onUpdate('cascade');
 		              });
 
-              		
+
          }
 
 	}
@@ -601,8 +602,8 @@ class InitCtrl extends Controller
 
         if(!Schema::connection('pgsql')->hasTable($schema.'master_'.$tahun.'_subkegiatan_indikator')){
               Schema::connection('pgsql')->create($schema.'master_'.$tahun.'_subkegiatan_indikator',function(Blueprint $table) use ($schema,$tahun){
-                 
-         
+
+
                         $table->bigIncrements('id');
                         $table->integer('status')->default(0);
                         $table->text('kodedata')->unique();
@@ -633,10 +634,10 @@ class InitCtrl extends Controller
                         $table->longText('target_n1')->nullable();
                         $table->double('pagu_n1',25,3)->default(0);
                         $table->integer('jenis')->nullable();
-                        $table->bigInteger('rpjmn')->nullable();
-                        $table->bigInteger('spm')->nullable();
-                        $table->bigInteger('sdgs')->nullable();
-                        $table->bigInteger('lainya')->nullable();
+                        $table->double('target_penyesuaian',25,3)->nullable();
+                        $table->boolean('cal')->default(false);
+
+
                         $table->bigInteger('transactioncode')->nullable();
                         $table->timestamps();
 
@@ -648,17 +649,17 @@ class InitCtrl extends Controller
                          $table->foreign('id_sub_kegiatan')
                               ->references('id')->on($schema.'master_'.$tahun.'_subkegiatan')
                               ->onDelete('cascade')->onUpdate('cascade');
-                          
+
 
                         $table->foreign('id_bidang')
                               ->references('id')->on($schema.'master_'.$tahun.'_bidang')
                               ->onDelete('cascade')->onUpdate('cascade');
-                          
+
 
                         $table->foreign('id_program')
                               ->references('id')->on($schema.'master_'.$tahun.'_program')
                               ->onDelete('cascade')->onUpdate('cascade');
-    
+
               });
          }
 
@@ -670,12 +671,12 @@ class InitCtrl extends Controller
         if(!(DB::table(DB::raw("(select * from information_schema.tables where table_schema='rkpd' and table_name='view_master_".$tahun."_rkpd') as c"))->first())){
 
             DB::statement("create view rkpd.view_master_".$tahun."_rkpd as select * from ((
-            select 
-                min(k.status) as status, 
-                1 as index, 
-                k.id_program as index_p, 
-                0 as index_pi, 
-                min(k.id) as index_k, 
+            select
+                min(k.status) as status,
+                1 as index,
+                k.id_program as index_p,
+                0 as index_pi,
+                min(k.id) as index_k,
                 0 as index_ki,
                 min(k.kodepemda) as kodepemda,
                 (case when (length(min(k.kodepemda))>3) then concat(min(d.nama),' - ',(select p.nama from public.master_daerah as p where p.id = left(min(k.kodepemda),2))) else min(d.nama) end) as nama_pemda,
@@ -698,21 +699,21 @@ class InitCtrl extends Controller
                 '' as target,
                 '' as satuan,
                 null as pagu_indikator
-            from rkpd.master_".$tahun."_kegiatan as k 
+            from rkpd.master_".$tahun."_kegiatan as k
             left join rkpd.master_".$tahun."_program as p on p.id=k.id_program
             left join public.master_urusan as u on u.id=k.id_urusan
             left join public.master_sub_urusan as su on su.id=k.id_sub_urusan
             left join public.master_daerah as d on d.id=k.kodepemda
-            group by k.id_program   
-            ) 
-            union 
+            group by k.id_program
+            )
+            union
             (
-            select 
+            select
                 k.status,
-                2 as index, 
-                k.id_program as index_p, 
-                pi.id as index_pi, 
-                k.id as index_k, 
+                2 as index,
+                k.id_program as index_p,
+                pi.id as index_pi,
+                k.id as index_k,
                 0 as index_ki,
                 k.kodepemda,
                 (case when (length(k.kodepemda)>3) then concat(d.nama,' - ',(select p.nama from public.master_daerah as p where p.id = left(k.kodepemda,2))) else d.nama end) as nama_pemda,
@@ -735,21 +736,21 @@ class InitCtrl extends Controller
                 pi.target as target,
                 pi.satuan as satuan,
                 pi.pagu as pagu_indikator
-            from rkpd.master_".$tahun."_kegiatan as k 
+            from rkpd.master_".$tahun."_kegiatan as k
             left join rkpd.master_".$tahun."_program as p on p.id=k.id_program
             left join public.master_urusan as u on u.id=k.id_urusan
             left join public.master_sub_urusan as su on su.id=k.id_sub_urusan
             left join public.master_daerah as d on d.id=k.kodepemda
-            join rkpd.master_".$tahun."_program_capaian as pi on pi.id_program =k.id_program 
-            ) 
+            join rkpd.master_".$tahun."_program_capaian as pi on pi.id_program =k.id_program
+            )
             union
             (
-            select 
+            select
                 k.status,
-                3 as index, 
-                k.id_program as index_p, 
-                0 as index_pi, 
-                k.id as index_k, 
+                3 as index,
+                k.id_program as index_p,
+                0 as index_pi,
+                k.id as index_k,
                 0 as index_ki,
                 k.kodepemda,
                 (case when (length(k.kodepemda)>3) then concat(d.nama,' - ',(select p.nama from public.master_daerah as p where p.id = left(k.kodepemda,2))) else d.nama end) as nama_pemda,
@@ -772,20 +773,20 @@ class InitCtrl extends Controller
                 '' as target,
                 '' as satuan,
                 null as pagu_indikator
-            from rkpd.master_".$tahun."_kegiatan as k 
+            from rkpd.master_".$tahun."_kegiatan as k
             left join rkpd.master_".$tahun."_program as p on p.id=k.id_program
             left join public.master_urusan as u on u.id=k.id_urusan
             left join public.master_sub_urusan as su on su.id=k.id_sub_urusan
             left join public.master_daerah as d on d.id=k.kodepemda
             )
-            union 
+            union
             (
-            select 
+            select
                 k.status,
-                4 as index, 
-                k.id_program as index_p, 
-                0 as index_pi, 
-                k.id as index_k, 
+                4 as index,
+                k.id_program as index_p,
+                0 as index_pi,
+                k.id as index_k,
                 ki.id as index_ki,
                 k.kodepemda,
                 (case when (length(k.kodepemda)>3) then concat(d.nama,' - ',(select p.nama from public.master_daerah as p where p.id = left(k.kodepemda,2))) else d.nama end) as nama_pemda,
@@ -808,7 +809,7 @@ class InitCtrl extends Controller
                 ki.target as target,
                 ki.satuan as satuan,
                 ki.pagu as pagu_indikator
-            from rkpd.master_".$tahun."_kegiatan as k 
+            from rkpd.master_".$tahun."_kegiatan as k
             left join rkpd.master_".$tahun."_program as p on p.id=k.id_program
             left join public.master_urusan as u on u.id=k.id_urusan
             left join public.master_sub_urusan as su on su.id=k.id_sub_urusan
@@ -830,6 +831,3 @@ class InitCtrl extends Controller
 
     }
 }
-
-
-
