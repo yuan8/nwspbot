@@ -129,6 +129,7 @@ class GETDATA extends Controller
 
 
 	public static function getData($tahun=2020,$kodepemda=11,$status=5,$transactioncode=111,$console=false){
+
     	set_time_limit(-1);
         ini_set('memory_limit', '6095M');
     	static::$transactioncode=$transactioncode;
@@ -166,8 +167,16 @@ class GETDATA extends Controller
 			    ]
 			];
 
+			$data_status=DB::table('rkpd.master_'.$tahun.'_status')->where(['kodepemda'=>$kodepemda],['status'=>$status,'pagu'=>static::$pagutotal],['transactioncode'=>$transactioncode])->first();
+
+			if($data_status){
+				DB::table('rkpd.master_'.$tahun.'_status as s')->where('s.kodepemda',$kodepemda)->where('s.tahun',$tahun)
+				->update(['s.attemp'=>DB::raw("(s.attemp::numeric + 1)")]);
+			}
+
 			$context = static::con($path,'get',[]);
 			static::$kodepemda=$kodepemda;
+
 
 			if(file_exists(storage_path('app/BOT/SIPD/RKPD/'.$tahun.'/JSON-SIPD/'.$kodepemda.'.'.$status.'.'.$transactioncode.'.json'))){
 
@@ -185,17 +194,19 @@ class GETDATA extends Controller
 
 
 			}
-			$data_last=DB::table('rkpd.master_'.$tahun.'_status_data')->where(['kodepemda'=>$kodepemda],['status'=>$status,'pagu'=>static::$pagutotal])->first();
-			if($data_last){
-				DB::table('rkpd.master_'.$tahun.'_status')->where('kodepemda',$kodepemda)->where('tahun',$tahun)
-				->update([DB::raw('attemp')=>DB::raw('attemp + 1')]);
 
+			$data_last=DB::table('rkpd.master_'.$tahun.'_status_data')->where(['kodepemda'=>$kodepemda],['status'=>$status,'pagu'=>static::$pagutotal],['transactioncode'=>$transactioncode])->first();
+			$data_status=DB::table('rkpd.master_'.$tahun.'_status')->where(['kodepemda'=>$kodepemda],['status'=>$status,'pagu'=>static::$pagutotal],['transactioncode'=>$transactioncode])->first();
+
+			if((!empty($data_last)) AND (!empty($data_status))){
+				DB::table('rkpd.master_'.$tahun.'_status as s')->where('s.kodepemda',$kodepemda)->where('s.tahun',$tahun)
+				->update(['tipe_pengambilan'=>$data_status->tipe_pengambilan]);
 
 			}else{
 
 				DB::table('rkpd.master_'.$tahun.'_bidang')->where('kodepemda',$kodepemda)->where('tahun',$tahun)->delete();
 
-				DB::table('rkpd.master_'.$tahun.'_status_data')->where('kodepemda',$kodepemda)->where('tahun',$tahun)->update(['matches'=>false]);
+				DB::table('rkpd.master_'.$tahun.'_status_data')->where('kodepemda',$kodepemda)->where('tahun',$tahun)->update(['matches'=>false,'tipe_pengambilan'=>$data_status->tipe_pengambilan]);
 
 				$store=STOREDATA::store($data,$kodepemda,$tahun,$transactioncode);
 
