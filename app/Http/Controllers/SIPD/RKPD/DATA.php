@@ -79,11 +79,6 @@ class DATA extends Controller
 
 
 
-<<<<<<< HEAD
-=======
-
-  
->>>>>>> fe211962b075a79a0dfe7adf511f36154f537728
 
         $return="";
 
