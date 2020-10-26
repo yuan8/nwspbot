@@ -19,9 +19,9 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::prefix('connection-sinkronisasi')->group(function(){
 	Route::prefix('sat')->group(function(){
-		Route::get('last-record/{tahun}/{pemda?}','SAT@sat');
-		Route::get('laporan-per-daerah/{tahun}/{pemda}','SAT@series_laporan');
-		Route::get('list-data/{tahun}/{pemda?}','SAT@list_data');
+		Route::get('last-record/{tahun}/{pemda?}','SAT\DATA@sat');
+		Route::get('laporan-per-daerah/{tahun}/{pemda}','SAT\DATA@series_laporan');
+		Route::get('list-data/{tahun}/{pemda?}','SAT\DATA@list_data');
 	});
 });
 
