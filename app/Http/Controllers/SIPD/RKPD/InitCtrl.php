@@ -737,7 +737,7 @@ class InitCtrl extends Controller
                 pi.target as target,
                 pi.satuan as satuan,
                 pi.pagu as pagu_indikator,
-                ki.target ~ '^[0-9\.]+$' as can_calculate 
+                pi.target ~ '^[0-9\.]+$' as can_calculate 
             from rkpd.master_".$tahun."_kegiatan as k
             left join rkpd.master_".$tahun."_program as p on p.id=k.id_program
             left join public.master_urusan as u on u.id=k.id_urusan
