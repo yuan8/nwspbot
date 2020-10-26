@@ -85,8 +85,8 @@ Route::prefix('bot-dss/')->middleware('auth:web')->group(function () {
 		Route::prefix('sat/via-api')->group(function () {
 			Route::prefix('data/{tahun}')->group(function () {
 				Route::get('/','SAT\SATVIAAPI@index')->name('nuwsp.sat');
-				Route::get('/get-list','SIPD\RKPD\LISTDATA@getData')->name('nuwsp.sat.list.update');
-				Route::get('/get-data/{kodepemda}/{status}/{transactioncode}','SIPD\RKPD\GETDATA@getData')->name('nuwsp.sat.data.update');
+				Route::get('/detail/{kode_laporan}','SAT\SATVIAAPI@detail')->name('nuwsp.sat.detail');
+				Route::get('/pemetaan-pemda','SAT\SATVIAAPI@pemetaan_data')->name('nuwsp.sat.data.pemetaan_data');
 			});
 		});
 

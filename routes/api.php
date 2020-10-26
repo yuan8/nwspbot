@@ -33,5 +33,11 @@ Route::prefix('sipd/rkpd/{tahun}')->group(function(){
 	Route::post('/{kodepemda}/pemetaan/indikator','SIPD\RKPD\DATA@update_pemetaan_indikator')->name('api.sipd.rkpd.pemetaan.api.update.indikator');
 });
 
+Route::prefix('sat/api/{tahun}')->group(function(){
+	Route::post('pemetaan','SAT\SATVIAAPI@pemetaan_data_store')->name('api.sat.api.pemetaan.update');
+	
+});
+
+
 
 

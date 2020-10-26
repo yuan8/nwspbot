@@ -38,5 +38,8 @@ class SAT extends Command
     public function handle()
     {
         //
+       $d=\App\Http\Controllers\SAT\DATA::getdata();
+        $this->info("Building {$d}");
+
     }
 }

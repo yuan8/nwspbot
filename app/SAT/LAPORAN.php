@@ -9,7 +9,8 @@ use App\SAT\LAPORANKEUANGAN;
 use App\SAT\LAPORANOPERASIONAL;
 use App\SAT\LAPORANPEMDA;
 use App\SAT\MASTERPDAM;
-
+use App\MASTER\MASTERDAERAH;
+use DB;
 
 
 class LAPORAN extends Model
@@ -23,6 +24,8 @@ class LAPORAN extends Model
 
     protected $table='sat.laporan';
 
+    
+
     public function _ketegori(){
     	return $this->hasMany(LAPORANKATEGORI::class,'id_laporan');
     }
@@ -30,6 +33,10 @@ class LAPORAN extends Model
     public function _pdam(){
     	return $this->belongsTo(MASTERPDAM::class,'pemda_id','pemda_id');
     }
+
+    // public function _daerah(){
+    //     return $this->belongsTo(MASTERDAERAH::class,DB::raw('pemda_id'),DB::raw('id::integer'));
+    // }
 
     public function _pelayanan(){
     	return $this->hasMany(LAPORANPELAYANAN::class,'id_laporan');

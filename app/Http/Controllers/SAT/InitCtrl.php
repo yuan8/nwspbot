@@ -18,12 +18,12 @@ class InitCtrl extends Controller
     	 if(!Schema::connection('pgsql')->hasTable($schema.'master_pdam')){
               Schema::create($schema.'master_pdam', function (Blueprint $table) {
                     $table->bigIncrements('id');
-                    $table->string('name')->unique();
+                    $table->string('name');
                     $table->string('address')->nullable();
                     $table->string('regencies_id',4)->nullable();
                     $table->string('provincies_id',2)->nullable();
                     $table->string('districts_id',11)->nullable();
-                    $table->string('pemda_id',4)->unique()->nullable();
+                    $table->string('pemda_id',4)->nullable();
                     $table->timestamps();
                 });
           }
@@ -59,7 +59,7 @@ class InitCtrl extends Controller
                     $table->dateTime('insert_date')->nullable();
                     $table->timestamps();
                     $table->foreign('pemda_id')
-                      ->references('pemda_id')->on($schema.'master_pdam')
+                      ->references('id')->on('public.master_daerah')
                       ->onDelete('cascade')->onUpdate('cascade');
 
               });
@@ -93,6 +93,7 @@ class InitCtrl extends Controller
                     $table->bigInteger('id_question')->unsigned();
 
                     $table->double('data',25,3)->nullable();
+                    
                     $table->unique(['id_laporan','id_question']);
 
 
@@ -113,6 +114,7 @@ class InitCtrl extends Controller
                     $table->string('id_laporan');
                     $table->bigInteger('id_question')->unsigned();
                     $table->double('data',25,3)->nullable();
+
                     $table->unique(['id_laporan','id_question']);
 
 
@@ -132,7 +134,8 @@ class InitCtrl extends Controller
 
                     $table->string('id_laporan');
                     $table->bigInteger('id_question')->unsigned();
-                    $table->double('data',25,3)->nullable();
+                    $table->string('data')->nullable();
+
                     $table->unique(['id_laporan','id_question']);
 
 
@@ -153,7 +156,7 @@ class InitCtrl extends Controller
                     $table->string('id_laporan');
                     $table->bigInteger('id_question')->unsigned();
 
-                    $table->double('data',25,3)->nullable();
+                    $table->string('data')->nullable();
                     $table->unique(['id_laporan','id_question']);
 
 

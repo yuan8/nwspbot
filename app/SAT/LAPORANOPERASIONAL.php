@@ -9,7 +9,8 @@ class LAPORANOPERASIONAL extends Model
 {
     //
      protected $table='sat.laporan_operasional';
-
+    protected $with=['_question'];
+     
 
     public function _question(){
     	return $this->belongsTo(MASTERPERTANYAAN::class,'id_question');

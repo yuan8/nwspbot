@@ -69,6 +69,10 @@ class HelperProvider extends ServiceProvider
           # code...
          return  static::sipd_menu();
           break;
+       case 'sat':
+        # code...
+       return  static::sat_api_menu();
+        break;
         
         default:
           # code...
@@ -91,6 +95,24 @@ class HelperProvider extends ServiceProvider
           'text'=>'DASHBOARD',
           'href'=>route('sipd.rkpd.d.indikator',[isset($tahun)?$tahun:date('Y')]),
         ]
+
+      ];
+
+      return $menus;
+    }
+
+     static function sat_api_menu(){
+      $menus=[
+        'MENU SAT',
+        [
+          'text'=>'SAT',
+          'href'=>route('nuwsp.sat',['tahun'=>isset($tahun)?$tahun:date('Y')]),
+        ],
+        [
+          'text'=>'PEMETAAN LAPORAN',
+          'href'=>route('nuwsp.sat.data.pemetaan_data',['tahun'=>isset($tahun)?$tahun:date('Y')]),
+        ],
+       
 
       ];
 
