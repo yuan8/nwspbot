@@ -698,7 +698,8 @@ class InitCtrl extends Controller
                 '' as  indikator,
                 '' as target,
                 '' as satuan,
-                null as pagu_indikator
+                null as pagu_indikator,
+                false as can_calculate
             from rkpd.master_".$tahun."_kegiatan as k
             left join rkpd.master_".$tahun."_program as p on p.id=k.id_program
             left join public.master_urusan as u on u.id=k.id_urusan
@@ -735,7 +736,8 @@ class InitCtrl extends Controller
                 pi.tolokukur as  indikator,
                 pi.target as target,
                 pi.satuan as satuan,
-                pi.pagu as pagu_indikator
+                pi.pagu as pagu_indikator,
+                ki.target ~ '^[0-9\.]+$' as can_calculate 
             from rkpd.master_".$tahun."_kegiatan as k
             left join rkpd.master_".$tahun."_program as p on p.id=k.id_program
             left join public.master_urusan as u on u.id=k.id_urusan
@@ -772,7 +774,8 @@ class InitCtrl extends Controller
                 '' as  indikator,
                 '' as target,
                 '' as satuan,
-                null as pagu_indikator
+                null as pagu_indikator,
+                false as can_calculate
             from rkpd.master_".$tahun."_kegiatan as k
             left join rkpd.master_".$tahun."_program as p on p.id=k.id_program
             left join public.master_urusan as u on u.id=k.id_urusan
@@ -808,7 +811,9 @@ class InitCtrl extends Controller
                 ki.tolokukur as  indikator,
                 ki.target as target,
                 ki.satuan as satuan,
-                ki.pagu as pagu_indikator
+                ki.pagu as pagu_indikator,
+                ki.target ~ '^[0-9\.]+$' as can_calculate 
+
             from rkpd.master_".$tahun."_kegiatan as k
             left join rkpd.master_".$tahun."_program as p on p.id=k.id_program
             left join public.master_urusan as u on u.id=k.id_urusan
