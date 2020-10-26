@@ -28,8 +28,7 @@
         <!-- /.col -->
         <div class="col-sm-4">
           <div class="description-block">
-            <h5 class="description-header"><a href="{{route('nuwsp.sat',['tahun'=>$data['tahun']])}}" disabled class="btn btn-default">DETAIL</a></h5>
-
+            <h5 class="description-header"><a href="{{route('nuwsp.sat',['tahun'=>$data['tahun']])}}"  class="btn btn-default">DETAIL</a></h5>
           </div>
           <!-- /.description-block -->
         </div>

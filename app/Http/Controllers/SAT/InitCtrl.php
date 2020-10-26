@@ -12,7 +12,7 @@ class InitCtrl extends Controller
 {
     //
 
-    public function init($tahun){
+    public static function init($tahun){
         $schema='sat.';
 
     	 if(!Schema::connection('pgsql')->hasTable($schema.'master_pdam')){
@@ -167,5 +167,7 @@ class InitCtrl extends Controller
 
               });
           }
+
+          return 'SAT INI DONE';
     }
 }
