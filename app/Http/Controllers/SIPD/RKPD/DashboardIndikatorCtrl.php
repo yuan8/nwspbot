@@ -11,19 +11,13 @@ class DashboardIndikatorCtrl extends Controller
     //
 
     public function index($tahun){
-
-       
         $data=[];
         foreach(Hp::tipe_indikator() as $keytipe=>$tipe){
             $data[$keytipe]['count']=DB::table('rkpd.master_peta_indikator as mi')
             ->whereRaw("mi.tipe='".$tipe."'")
             ->count();
             $data[$keytipe]['nama']=$tipe;
-
         }
-
-
-    	
     	return view('sipd.rkpd.dashboard.indikator.index')->with(['tahun'=>$tahun,'data'=>$data]);
     }
 
@@ -34,7 +28,7 @@ class DashboardIndikatorCtrl extends Controller
             ->join('rkpd.master_'.$tahun.'_peta_indikator_kegiatan as pki','pki.kodedata','=','ki.kodedata')
             ->join('rkpd.master_'.$tahun.'_status_data as st','st.kodepemda','=','ki.kodepemda')
             ->whereRaw('st.status = 5')
-    		->selectRaw("pki.id_master as id_master,ki.kodepemda,ki.tahun,'OUTPUT' as jenis,ki.id as k_i,null k_p,ki.tolokukur,ki.target,ki.satuan,ki.rpjmn,ki.spm,ki.sdgs,ki.lainya");
+    		->selectRaw("pki.id_master as id_master,ki.kodepemda,ki.tahun,'OUTPUT' as jenis,ki.id as k_i,null k_p,ki.tolokukur,ki.target,ki.satuan");
 
 
     		$data=DB::table('rkpd.master_peta_indikator as i')
@@ -47,7 +41,7 @@ class DashboardIndikatorCtrl extends Controller
                 ->join('rkpd.master_'.$tahun.'_peta_indikator_program as ppi','ppi.kodedata','=','c.kodedata')
                 ->join('rkpd.master_'.$tahun.'_status_data as stp','stp.kodepemda','=','c.kodepemda')
                 ->whereRaw('stp.status = 5')
-    			->selectRaw("ppi.id_master as id_master,c.kodepemda,c.tahun,'OUTCOME' as jenis,null as k_i,c.id k_p,c.tolokukur,c.target,c.satuan,c.rpjmn,c.spm,c.sdgs,c.lainya")->union($d)->toSql().") as ind")
+    			->selectRaw("ppi.id_master as id_master,c.kodepemda,c.tahun,'OUTCOME' as jenis,null as k_i,c.id k_p,c.tolokukur,c.target,c.satuan")->union($d)->toSql().") as ind")
     		,DB::raw('ind.id_master'),'=','i.id')
     		->where('tipe',$keytipe)->get();
 
@@ -65,7 +59,7 @@ class DashboardIndikatorCtrl extends Controller
                 ->join('rkpd.master_'.$tahun.'_peta_indikator_kegiatan as pki','pki.kodedata','=','ki.kodedata')
                  ->join('rkpd.master_'.$tahun.'_status_data as st','st.kodepemda','=','ki.kodepemda')
                     ->whereRaw('st.status = 5')
-                ->selectRaw("pki.id_master as id_master,ki.kodepemda,ki.tahun,'OUTPUT' as jenis,ki.id as k_i,null p_i,ki.tolokukur,ki.target,ki.satuan,ki.rpjmn,ki.spm,ki.sdgs,ki.lainya");
+                ->selectRaw("pki.id_master as id_master,ki.kodepemda,ki.tahun,'OUTPUT' as jenis,ki.id as k_i,null p_i,ki.tolokukur,ki.target,ki.satuan");
 
                 $data=DB::table('rkpd.master_peta_indikator as i')
                 ->leftJoin('public.master_urusan as u','u.id','=','i.id_urusan')
@@ -84,7 +78,7 @@ class DashboardIndikatorCtrl extends Controller
                     ->join('rkpd.master_'.$tahun.'_peta_indikator_program as ppi','ppi.kodedata','=','c.kodedata')
                      ->join('rkpd.master_'.$tahun.'_status_data as st','st.kodepemda','=','c.kodepemda')
                      ->whereRaw('st.status = 5')
-                    ->selectRaw("ppi.id_master as id_master,c.kodepemda,c.tahun,'OUTCOME' as jenis,null as k_i,c.id p_i,c.tolokukur,c.target,c.satuan,c.rpjmn,c.spm,c.sdgs,c.lainya")->union($d)->toSql().") as ind")
+                    ->selectRaw("ppi.id_master as id_master,c.kodepemda,c.tahun,'OUTCOME' as jenis,null as k_i,c.id p_i,c.tolokukur,c.target,c.satuan")->union($d)->toSql().") as ind")
                 ,DB::raw('ind.id_master'),'=','i.id')
                 ->where([
                     ['tipe','=',$data_ind->tipe],['ind.kodepemda','!=',null]])->get();
@@ -130,7 +124,7 @@ class DashboardIndikatorCtrl extends Controller
                 ->join('rkpd.master_'.$tahun.'_peta_indikator_kegiatan as pki','pki.kodedata','=','ki.kodedata')
                 ->join('rkpd.master_'.$tahun.'_status_data as st','st.kodepemda','=','ki.kodepemda')
                 ->whereRaw('st.status = 5')
-                ->selectRaw("ki.target ~ '^[0-9\.]+$' as can_calculate,pki.id_master as id_master,ki.kodepemda,ki.tahun,'OUTPUT' as jenis,ki.id as k_i,null p_i,ki.tolokukur,ki.target,ki.satuan,ki.rpjmn,ki.spm,ki.sdgs,ki.lainya,(select uraibidang from master_".$tahun."_program as p where p.id=ki.id_program) as nama_bidang,(select uraiskpd from master_".$tahun."_program as p where p.id=ki.id_program) as nama_skpd,(select uraiprogram from master_".$tahun."_program as p where p.id=ki.id_program) as nama_program,(select uraikegiatan from master_".$tahun."_kegiatan as k where k.id=ki.id_kegiatan) as nama_kegiatan");
+                ->selectRaw("ki.target ~ '^[0-9\.]+$' as can_calculate,pki.id_master as id_master,ki.kodepemda,ki.tahun,'OUTPUT' as jenis,ki.id as k_i,null p_i,ki.tolokukur,ki.target,ki.satuan,(select uraibidang from master_".$tahun."_program as p where p.id=ki.id_program) as nama_bidang,(select uraiskpd from master_".$tahun."_program as p where p.id=ki.id_program) as nama_skpd,(select uraiprogram from master_".$tahun."_program as p where p.id=ki.id_program) as nama_program,(select uraikegiatan from master_".$tahun."_kegiatan as k where k.id=ki.id_kegiatan) as nama_kegiatan");
 
                 $data=DB::table('rkpd.master_peta_indikator as i')
                 ->selectRaw("ind.*")
@@ -139,7 +133,7 @@ class DashboardIndikatorCtrl extends Controller
                     ->join('rkpd.master_'.$tahun.'_peta_indikator_program as ppi','ppi.kodedata','=','c.kodedata')
                      ->join('rkpd.master_'.$tahun.'_status_data as st','st.kodepemda','=','c.kodepemda')
                      ->whereRaw('st.status = 5')
-                    ->selectRaw("c.target ~ '^[0-9\.]+$' as can_calculate,ppi.id_master as id_master,c.kodepemda,c.tahun,'OUTCOME' as jenis,null as k_i,c.id p_i,c.tolokukur,c.target,c.satuan,c.rpjmn,c.spm,c.sdgs,c.lainya,(select uraibidang from master_".$tahun."_program as p where p.id=c.id_program) as nama_bidang,(select uraiskpd from master_".$tahun."_program as p where p.id=c.id_program) as nama_skpd,(select uraiprogram from master_".$tahun."_program as p where p.id=c.id_program) as nama_program,null as nama_kegiatan")->union($d)->toSql().") as ind")
+                    ->selectRaw("c.target ~ '^[0-9\.]+$' as can_calculate,ppi.id_master as id_master,c.kodepemda,c.tahun,'OUTCOME' as jenis,null as k_i,c.id p_i,c.tolokukur,c.target,c.satuan,(select uraibidang from master_".$tahun."_program as p where p.id=c.id_program) as nama_bidang,(select uraiskpd from master_".$tahun."_program as p where p.id=c.id_program) as nama_skpd,(select uraiprogram from master_".$tahun."_program as p where p.id=c.id_program) as nama_program,null as nama_kegiatan")->union($d)->toSql().") as ind")
                 ,DB::raw('ind.id_master'),'=','i.id')
                 ->where([['i.id','=',$id],['ind.kodepemda','=',$kodepemda]])
                 ->orderBy('ind.nama_bidang','asc')
@@ -167,20 +161,7 @@ class DashboardIndikatorCtrl extends Controller
                     $program[trim($value->nama_program,true)]=trim($value->nama_program,true);
                 }
 
-
-
-
-
                 return view('sipd.rkpd.dashboard.indikator.sebaran')->with(['data'=>$data,'kalkulasi'=>$kalkulasi,'data_ind'=>$data_ind,'daerah'=>$daerah,'tahun'=>$tahun,'program'=>$program]);
-
-
-
-
-
-
-
-    			
-
 
     		}
 
