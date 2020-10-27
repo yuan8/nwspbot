@@ -155,22 +155,22 @@
 					<td style="width:250px;">
 						<div class="btn-group">
 						@if(!$d->rkpd_match)
-							<a href="{{route('sipd.rkpd.data.update',['tahun'=>$tahun,'kodepemda'=>$d->kodepemda,'status'=>$d->status,'transactioncode'=>$d->transactioncode])}}" class="btn btn-success btn-xs" >
+							<a href="{{route('sipd.rkpd.data.update',['tahun'=>$tahun,'kodepemda'=>$d->kodepemda?$d->kodepemda:$d->kodepemda_m,'status'=>$d->status,'transactioncode'=>$d->transactioncode])}}" class="btn btn-success btn-xs" >
 							UPDATE
 
 						</a>
 
 
 						@elseif($d->rkpd_match)
-						<button onclick="force('{{route('sipd.rkpd.data.update',['tahun'=>$tahun,'kodepemda'=>$d->kodepemda,'status'=>$d->status,'transactioncode'=>$d->transactioncode])}}','')" class="btn btn-warning btn-xs" >
+						<button onclick="force('{{route('sipd.rkpd.data.update',['tahun'=>$tahun,'kodepemda'=>$d->kodepemda?$d->kodepemda:$d->kodepemda_m,'status'=>$d->status,'transactioncode'=>$d->transactioncode])}}','')" class="btn btn-warning btn-xs" >
 							UPDATE FORCE
 						</button>
 
 						@endif
 						@if($d->attemp or $d->rkpd_match)
-								<a href="{{route('sipd.rkpd.json',['tahun'=>$tahun,'json_id'=>$d->kodepemda.'.'.$d->status.'.'.$d->transactioncode])}}" class="btn btn-primary  btn-xs">JSON</a>
-								<a href="{{route('sipd.rkpd.data.download',['tahun'=>$tahun,'kodepemda'=>$d->kodepemda])}}" class="btn btn-info  btn-xs"><i class="fa fa-download"></i> .</a>
-								<a href="{{route('sipd.rkpd.pemetaan',['tahun'=>$tahun,'kodepemda'=>$d->kodepemda])}}" class="btn btn-navy bg-navy btn-xs">PEMETAAN</a>
+								<a href="{{route('sipd.rkpd.json',['tahun'=>$tahun,'json_id'=>$d->kodepemda?$d->kodepemda:$d->kodepemda_m.'.'.$d->status.'.'.$d->transactioncode])}}" class="btn btn-primary  btn-xs">JSON</a>
+								<a href="{{route('sipd.rkpd.data.download',['tahun'=>$tahun,'kodepemda'=>$d->kodepemda?$d->kodepemda:$d->kodepemda_m])}}" class="btn btn-info  btn-xs"><i class="fa fa-download"></i> .</a>
+								<a href="{{route('sipd.rkpd.pemetaan',['tahun'=>$tahun,'kodepemda'=>$d->kodepemda?$d->kodepemda:$d->kodepemda_m])}}" class="btn btn-navy bg-navy btn-xs">PEMETAAN</a>
 						@endif
 
 						</div>
