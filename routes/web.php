@@ -24,7 +24,7 @@ Route::prefix('initial/{tahun}')->group(function(){
 	Route::get('sat','SAT\InitCtrl@init');
 });
 
-Route::group(['prefix' => 'filemanager', 'middleware' => ['web', 'auth']], function () {
+Route::group(['prefix' => 'filemanager', 'middleware' => ['web', 'auth','can:user_kita']], function () {
      \UniSharp\LaravelFilemanager\Lfm::routes();
  });
 

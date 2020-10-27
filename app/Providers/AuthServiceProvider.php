@@ -26,5 +26,8 @@ class AuthServiceProvider extends ServiceProvider
         $this->registerPolicies();
 
         //
+        Gate::define('user_kita', function ($user) {
+            return $user->user_kita;
+        });
     }
 }
