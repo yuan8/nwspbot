@@ -31,4 +31,9 @@ class BOT extends Controller
       $data=DB::table('sat.'.'laporan')->selectRaw($tahun." as tahun, max(created_at) as last_date,count(*) as count")->first();
       return view('box.nuwsp_api')->with(['data'=>(array)$data])->render();
     }
+
+    public function file_manager($tahun=null){
+      
+      return view('box.filemanager')->render();
+    }
 }

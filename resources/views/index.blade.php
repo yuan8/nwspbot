@@ -24,6 +24,10 @@
 			$('#list-bot').append('<div class="col-md-4">'+res+'</div>');
 	});
 
+	$.get('{{route('box.filemanager',['tahun'=>$tahun])}}',function(res){
+			$('#list-bot').append('<div class="col-md-4">'+res+'</div>');
+	});
+
 
 
 
