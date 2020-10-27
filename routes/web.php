@@ -31,6 +31,8 @@ Route::group(['prefix' => 'filemanager', 'middleware' => ['web', 'auth']], funct
 Route::get('/box-sipd/{tahun?}', 'BOT@get_sipd_rkpd')->name('box.sipd');
 Route::get('/box-sirup/{tahun?}', 'BOT@get_sirup')->name('box.sirup');
 Route::get('/box-nuwsp-api/{tahun?}', 'BOT@get_nuwsp_api')->name('box.nuwsp.api');
+Route::get('/box-filemanager/', 'BOT@file_manager')->name('box.filemanager');
+
 
 
 
