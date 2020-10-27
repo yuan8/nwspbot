@@ -13,25 +13,36 @@ class SipdIndikatorAddTable extends Migration
      */
     public function up()
     {
-        //
-        //  Schema::table('rkpd.master_2020_kegiatan_indikator', function($table) {
-        //           $table->bigInteger('rpjmn')->nullable();
+        
+         Schema::table('rkpd.master_2020_status', function($table) {
+                $table->string('sumber_data')->nullable();
+                $table->string('perkada')->nullable();
+                $table->string('nomenklatur')->nullable();
 
-        //         $table->bigInteger('spm')->nullable();
-        //         $table->bigInteger('sdgs')->nullable();
-        //         $table->bigInteger('lainya')->nullable();
+        });
+         Schema::table('rkpd.master_2020_status_data', function($table) {
+                 $table->string('sumber_data')->nullable();
+                $table->string('perkada')->nullable();
+                $table->string('nomenklatur')->nullable();
+                    $table->string('dokumen_path')->nullable();
 
-        //          $table->double('target_peneyesuaian',25,3)->nullable();
 
-        // });
-        //  Schema::table('rkpd.master_2020_subkegiatan_indikator', function($table) {
-        //          $table->bigInteger('rpjmn')->nullable();
-        //         $table->bigInteger('spm')->nullable();
-        //         $table->bigInteger('sdgs')->nullable();
-        //         $table->bigInteger('lainya')->nullable();
-        //          $table->double('target_peneyesuaian',25,3)->nullable();
+        });
 
-        // });
+            Schema::table('rkpd.master_2021_status', function($table) {
+                $table->string('sumber_data')->nullable();
+                $table->string('perkada')->nullable();
+                $table->string('nomenklatur')->nullable();
+
+        });
+         Schema::table('rkpd.master_2021_status_data', function($table) {
+                 $table->string('sumber_data')->nullable();
+                $table->string('perkada')->nullable();
+                $table->string('nomenklatur')->nullable();
+                    $table->string('dokumen_path')->nullable();
+                
+
+        });
         // Schema::table('rkpd.master_2020_program_capaian', function($table) {
         //          $table->bigInteger('rpjmn')->nullable();
         //         $table->bigInteger('spm')->nullable();
