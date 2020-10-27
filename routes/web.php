@@ -22,9 +22,11 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::prefix('initial/{tahun}')->group(function(){
 	Route::get('rkpd','SIPD\RKPD\InitCtrl@init');
 	Route::get('sat','SAT\InitCtrl@init');
-
 });
 
+Route::group(['prefix' => 'filemanager', 'middleware' => ['web', 'auth']], function () {
+     \UniSharp\LaravelFilemanager\Lfm::routes();
+ });
 
 Route::get('/box-sipd/{tahun?}', 'BOT@get_sipd_rkpd')->name('box.sipd');
 Route::get('/box-sirup/{tahun?}', 'BOT@get_sirup')->name('box.sirup');
@@ -33,6 +35,7 @@ Route::get('/box-nuwsp-api/{tahun?}', 'BOT@get_nuwsp_api')->name('box.nuwsp.api'
 
 
 Route::prefix('bot-dss/')->middleware('auth:web')->group(function () {
+
 		Route::prefix('sipd/rkpd/master')->group(function(){
 			Route::get('/indikator','SIPD\RKPD\MasterPemetaanIndikatorCtrl@index')->name('sipd.rkpd.ind.master');
 			Route::get('/indikator/satuan','SIPD\RKPD\MasterPemetaanIndikatorCtrl@satuan')->name('sipd.rkpd.ind.master.satuan');

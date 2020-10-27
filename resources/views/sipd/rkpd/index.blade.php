@@ -24,7 +24,6 @@
 					@foreach($urusan as $b)
 						<option value="{{$b->id}}">{{$b->nama}}</option>
 					@endforeach
-
 				</select>
 			</div>
 			<div class="col-md-2">
