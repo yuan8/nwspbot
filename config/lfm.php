@@ -64,7 +64,9 @@ return [
                 'application/vnd.ms-excel',
                 'application/vnd.ms-excel.sheet.macroenabled.12 ',
                 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-                '*'
+                'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                'application/zip',
+                'application/vnd.openxmlformats-officedocument.presentationml.presentation',
             ],
         ],
         'image' => [
