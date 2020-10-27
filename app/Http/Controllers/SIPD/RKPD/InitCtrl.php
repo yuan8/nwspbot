@@ -27,6 +27,7 @@ class InitCtrl extends Controller
         static::sub_kegiatan_indikator($tahun);
     	static::sub_kegiatan_sumberdana($tahun);
         static::view($tahun);
+        static::master_peta_indikator($tahun);
         static::peta_indikator_kegiatan($tahun);
         static::peta_indikator_program($tahun);
         // static::peta_indikator_sub_kegiatan($tahun);
@@ -49,7 +50,11 @@ class InitCtrl extends Controller
                     $table->integer('status');
                     $table->integer('attemp')->default(0);
                     $table->text('tipe_pengambilan')->nullable();
+                    $table->string('sumber_data')->nullable();
                     $table->string('method')->nullable();
+                    $table->string('perkada')->nullable();
+                    $table->string('nomenklatur')->nullable();
+
                     $table->double('pagu',25,3)->default(0);
                     $table->dateTime('last_date')->nullable();
                     $table->bigInteger('transactioncode')->nullable();
@@ -67,7 +72,12 @@ class InitCtrl extends Controller
                     $table->integer('tahun');
                     $table->integer('status');
                     $table->text('tipe_pengambilan')->nullable();
+                    $table->string('sumber_data')->nullable();
                     $table->string('method')->nullable();
+                    $table->string('perkada')->nullable();
+                    $table->string('nomenklatur')->nullable();
+
+                    $table->string('dokumen_path')->nullable();
                     $table->double('pagu',25,3)->default(0);
                     $table->dateTime('last_date')->nullable();
                     $table->bigInteger('transactioncode')->nullable();
@@ -442,6 +452,36 @@ class InitCtrl extends Controller
 
 
 	}
+
+    static function master_peta_indikator($tahun){
+         $schema='rkpd.';
+        
+         if(!Schema::connection('pgsql')->hasTable($schema.'master_peta_indikator')){
+               Schema::connection('pgsql')->create($schema.'master_peta_indikator',function(Blueprint $table) use ($schema){
+                    $table->bigIncrements('id');
+                    $table->text('nama');
+                    $table->double('target',25,3)->default(0);
+                    $table->string('satuan')->nullable();
+                    $table->string('tipe');
+                    $table->longText('deskripsi')->nullable();
+                    $table->bigInteger('id_urusan')->unsigned();
+                    $table->bigInteger('id_sub_urusan')->unsigned();
+                    $table->integer('follow')->nullable();
+                    $table->timestamps();
+
+
+                    $table->foreign('id_urusan')
+                    ->references('id')->on('public.master_urusan')
+                    ->onDelete('cascade')->onUpdate('cascade');
+
+                    $table->foreign('id_sub_urusan')
+                        ->references('id')->on('public.master_sub_urusan')
+                        ->onDelete('cascade')->onUpdate('cascade');
+
+                });
+                    
+         }
+    }
 
 
     static function peta_indikator_kegiatan($tahun){

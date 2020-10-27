@@ -94,6 +94,10 @@ class HelperProvider extends ServiceProvider
         [
           'text'=>'DASHBOARD',
           'href'=>route('sipd.rkpd.d.indikator',[isset($tahun)?$tahun:date('Y')]),
+        ],
+          [
+          'text'=>'UPLOAD VIA DOKUMEN',
+          'href'=>route('sipd.rkpd.dokumen',[isset($tahun)?$tahun:date('Y')]),
         ]
 
       ];

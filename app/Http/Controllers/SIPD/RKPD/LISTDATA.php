@@ -150,12 +150,13 @@ class LISTDATA extends Controller
 		}
 
         $last_list_date=DB::table('rkpd.'.'master_'.$tahun.'_status as rk')->orderBy('updated_at','DESC')->pluck('updated_at')->first();
+
         $where=[];
         if($request->match){
             $where[]='rkpd_match = '.(string)$request->match;
         }
 
-        if($request->status){
+        if($request->status!=null){
             $where[]='status = '.(string)$request->status;
         }
 
@@ -164,16 +165,17 @@ class LISTDATA extends Controller
         }
 
 
-		$data=DB::table( DB::raw("(".DB::table('rkpd.'.'master_'.$tahun.'_status as rk')
+
+		$data=DB::table( DB::raw("(".DB::table('public.master_daerah as ld')
+        ->leftJoin('rkpd.'.'master_'.$tahun.'_status as rk','rk.kodepemda','=','ld.id')
         ->leftJoin('rkpd.'.'master_'.$tahun.'_status_data as d',[['d.kodepemda','=','rk.kodepemda'],['d.tahun','=','rk.tahun'],['d.status','=','rk.status'],['d.transactioncode','=','rk.transactioncode']])
-        ->selectRaw('rk.*,d.matches as rkpd_match,d.pagu as pagu_store,
-            (select nama from public.master_daerah as ld where ld.id=rk.kodepemda) as nama_pemda,
+        ->selectRaw("rk.*,d.matches as rkpd_match,d.pagu as pagu_store,
+                (case when length(ld.id::text)<3 then ld.nama else concat(ld.nama,' - ',(select p.nama from public.master_daerah as p where p.id::text = left(ld.id::text,2))) end) as nama_pemda,
+                ld.id as kodepemda_m,
                  rk.attemp as attemp,
                 d.id as stored
-            ')
-
-        ->orderBy(DB::raw('(rk.kodepemda)'),'ASC')->toSql().") as dd"))
-        ;
+        ")
+        ->orderBy(DB::raw('(ld.id)'),'ASC')->toSql().") as dd"));
 
         if(count($where)>0){
             $data->whereRaw(implode(' and ', $where));
@@ -233,7 +235,6 @@ class LISTDATA extends Controller
     		 foreach ($data['data'] as $key => $d) {
     		 	$status=0;
 
-
     		 	switch (1) {
     		 		case (int)$d['final']:
     		 			$status=5;
@@ -277,16 +278,40 @@ class LISTDATA extends Controller
 
 
     		 	$kodar=str_replace('00', '', $d['kodepemda']);
-        $reco=array('tipe_pengambilan'=>$d['modepenggunaan'],'kodepemda'=>$kodar,'tahun'=>$tahun,'status'=>$status,'updated_at'=>Carbon::now(),'last_date'=>$tanggal,'pagu'=>(float)$pagu,'matches'=>0,'transactioncode'=>'1'.$status.Carbon::parse($tanggal)->format('Ymdh'),'attemp'=>0);
+                $reco=array(
+                    'tipe_pengambilan'=>$d['modepenggunaan'],
+                    'kodepemda'=>$kodar,
+                    'tahun'=>$tahun,
+                    'status'=>$status,
+                    'updated_at'=>Carbon::now(),
+                    'last_date'=>$tanggal,
+                    'pagu'=>(float)$pagu,
+                    'matches'=>0,
+                    'transactioncode'=>'1'.$status.Carbon::parse($tanggal)->format('Ymdh'),
+                    'attemp'=>0,
+                    'nomenklatur'=>$d['nomenklatur'],
+                    'perkada'=>$d['perkada'],
+                    'method'=>'API',
+                    'sumber_data'=>'SIPD'
+                );
 
     		 	$data_return[]=$reco;
+                $data_status=DB::table('rkpd.master_'.$tahun.'_status')->where([
+                    ['kodepemda','=',$kodar],
+                    ['tahun','=',$tahun]
+                    ])->first();
+                if($data_status){
+                    if($data_status->method=='DOKUMEN'){
 
-                DB::table('rkpd.'.'master_'.$tahun.'_status')->updateOrInsert(
-                	[
-                	'kodepemda'=>$kodar,
-                	'tahun'=>$tahun
-                	]
-                	,$reco);
+                    }else{
+                    DB::table('rkpd.'.'master_'.$tahun.'_status')->where([
+                    ['kodepemda','=',$kodar],
+                    ['tahun','=',$tahun]
+                    ])->update($reco);
+                    }
+                }else{
+                    DB::table('rkpd.'.'master_'.$tahun.'_status')->insert($reco);
+                }
 
                 $data_pemda=(array)DB::table('rkpd.master_'.$tahun.'_status_data')->where('kodepemda',$kodar)->first();
 

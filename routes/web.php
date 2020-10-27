@@ -70,6 +70,12 @@ Route::prefix('bot-dss/')->middleware('auth:web')->group(function () {
 			Route::get('/get-data-masive','SIPD\RKPD\GETDATA@store_masive')->name('sipd.rkpd.data.masive');
 			Route::get('/download/{kodepemda?}','SIPD\RKPD\DATA@download')->name('sipd.rkpd.data.download');
 			Route::get('/data/{kodepemda?}','SIPD\RKPD\IO@index')->name('sipd.rkpd.data.show');
+			Route::get('/dokumen','SIPD\RKPD\DOKUMEN@index')->name('sipd.rkpd.dokumen');
+			Route::get('/dokumen/upload','SIPD\RKPD\DOKUMEN@upload')->name('sipd.rkpd.dokumen.upload');
+			Route::post('/dokumen/upload','SIPD\RKPD\DOKUMEN@store')->name('sipd.rkpd.dokumen.store');
+
+
+
 		});
 
 

@@ -98,7 +98,7 @@
 					</select>
 					@if(!isset($page_block))
 					<div class="input-group-btn">
-					<a {{isset(($page_block))?'area-disabled="true"':''}} href="{{route('sipd.rkpd.list.update',['tahun'=>$tahun])}}" class="btn btn-success   {{isset(($page_block))?'disabled':''}}">UPDATE REKAP RKPD {{$tahun}}</a>
+					<a {{isset(($page_block))?'area-disabled="true"':''}} href="{{route('sipd.rkpd.dokumen.upload',['tahun'=>$tahun])}}" class="btn btn-success   {{isset(($page_block))?'disabled':''}}">UPLOAD DOKUMEN RKPD {{$tahun}}</a>
 					</div>
 					@endif
 

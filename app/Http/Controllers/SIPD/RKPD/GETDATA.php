@@ -110,8 +110,8 @@ class GETDATA extends Controller
             (select nama from public.master_daerah as ld where ld.id=rk.kodepemda) as nama_pemda,
                 rk.attemp as attemp
             ')
-        ->where([['d.matches','=',false]])
-        ->orWhere([['d.matches','=',null]])
+        ->where([['d.matches','=',false],['d.sumber_data','!=','DOKUMEN']])
+        ->orWhere([['d.matches','=',null],['d.sumber_data','!=','DOKUMEN']])
         ->orderBy('rk.attemp','asc')
         ->orderBy(DB::raw('(rk.attemp)'),'ASC')->first();
 
@@ -124,11 +124,11 @@ class GETDATA extends Controller
     }
 
 
-
-
-
-
 	public static function getData($tahun=2020,$kodepemda=11,$status=5,$transactioncode=111,$console=false){
+
+		if($transactioncode==null){
+			return 'gagal';
+		}
 
     	set_time_limit(-1);
         ini_set('memory_limit', '6095M');
@@ -168,17 +168,26 @@ class GETDATA extends Controller
 			];
 
 			$data_status=DB::table('rkpd.master_'.$tahun.'_status')->where(['kodepemda'=>$kodepemda],['status'=>$status,'pagu'=>static::$pagutotal],['transactioncode'=>$transactioncode])->first();
+			$approve=false;
 
 			if($data_status){
+				if($data_status->sumber_data!='DOKUMEN'){
+					$approve=true;
+				}else{
+
 				DB::table('rkpd.master_'.$tahun.'_status as s')->where('s.kodepemda',$kodepemda)->where('s.tahun',$tahun)
 				->update(['s.attemp'=>DB::raw("(s.attemp::numeric + 1)")]);
+				}
+
+
 			}
 
 			$context = static::con($path,'get',[]);
 			static::$kodepemda=$kodepemda;
 
 
-			if(file_exists(storage_path('app/BOT/SIPD/RKPD/'.$tahun.'/JSON-SIPD/'.$kodepemda.'.'.$status.'.'.$transactioncode.'.json'))){
+			if($approve){
+				if(file_exists(storage_path('app/BOT/SIPD/RKPD/'.$tahun.'/JSON-SIPD/'.$kodepemda.'.'.$status.'.'.$transactioncode.'.json'))){
 
 				static::$data_json=json_decode(file_get_contents(storage_path('app/BOT/SIPD/RKPD/'.$tahun.'/JSON-SIPD/'.$kodepemda.'.'.$status.'.'.$transactioncode.'.json')),true);
 				$data=static::buildData($tahun,$kodepemda,$status);
@@ -186,40 +195,43 @@ class GETDATA extends Controller
 				Storage::put('BOT/SIPD/RKPD/'.$tahun.'/JSON-DATA/'.$kodepemda.'.'.$status.'.'.$transactioncode.'.json',json_encode(['pagu'=>static::$pagutotal,'status'=>$status,'transactioncode'=>$transactioncode,'via'=>'api','data'=>$data],true));
 
 
+				}else{
+
+					$data=static::buildData($tahun,$kodepemda,$status);
+					Storage::put('BOT/SIPD/RKPD/'.$tahun.'/JSON-SIPD/'.$kodepemda.'.'.$status.'.'.$transactioncode.'.json',json_encode(static::$data_json));
+					Storage::put('BOT/SIPD/RKPD/'.$tahun.'/JSON-DATA/'.$kodepemda.'.'.$status.'.'.$transactioncode.'.json',json_encode(['pagu'=>static::$pagutotal,'status'=>$status,'transactioncode'=>$transactioncode,'via'=>'api','data'=>$data],true));
+
+
+				}
+
+				$data_last=DB::table('rkpd.master_'.$tahun.'_status_data')->where(['kodepemda'=>$kodepemda],['status'=>$status,'pagu'=>static::$pagutotal],['transactioncode'=>$transactioncode])->first();
+				$data_status=DB::table('rkpd.master_'.$tahun.'_status')->where(['kodepemda'=>$kodepemda],['status'=>$status,'pagu'=>static::$pagutotal],['transactioncode'=>$transactioncode])->first();
+
+				if((!empty($data_last)) AND (!empty($data_status))){
+					DB::table('rkpd.master_'.$tahun.'_status as s')->where('s.kodepemda',$kodepemda)->where('s.tahun',$tahun)
+					->update(['tipe_pengambilan'=>$data_status->tipe_pengambilan,'method'=>$data_status->method,'sumber_data'=>$data_status->sumber_data,'perkada'=>$data_status->perkada,'nomenklatur'=>$data_status->nomenklatur]);
+
+				}else{
+
+					DB::table('rkpd.master_'.$tahun.'_bidang')->where('kodepemda',$kodepemda)->where('tahun',$tahun)->delete();
+
+					DB::table('rkpd.master_'.$tahun.'_status_data')->where('kodepemda',$kodepemda)->where('tahun',$tahun)->update(['matches'=>false,'tipe_pengambilan'=>$data_status->tipe_pengambilan,'method'=>$data_status->method,'sumber_data'=>$data_status->sumber_data,'perkada'=>$data_status->perkada,'nomenklatur'=>$data_status->nomenklatur]);
+
+					$store=STOREDATA::store($data,$kodepemda,$tahun,$transactioncode);
+
+				}
+
+				if($console){
+					$daerah=DB::table('public.master_daerah')->find($kodepemda);
+					return $kodepemda.' - '.$daerah->nama.' tahun : '.$tahun.' -> build pagu : Rp.'.number_format(static::$pagutotal);
+				}else{
+					return back();
+
+				}
+
 			}else{
-
-				$data=static::buildData($tahun,$kodepemda,$status);
-				Storage::put('BOT/SIPD/RKPD/'.$tahun.'/JSON-SIPD/'.$kodepemda.'.'.$status.'.'.$transactioncode.'.json',json_encode(static::$data_json));
-				Storage::put('BOT/SIPD/RKPD/'.$tahun.'/JSON-DATA/'.$kodepemda.'.'.$status.'.'.$transactioncode.'.json',json_encode(['pagu'=>static::$pagutotal,'status'=>$status,'transactioncode'=>$transactioncode,'via'=>'api','data'=>$data],true));
-
-
+				return 'SUMBER DATA DIARAHKAN PADA DOKUMEN, ANDA HANYA BISA MELAKUKAN UPDATE PADA FORM UPLOAD DOKUMEN RKPD';
 			}
-
-			$data_last=DB::table('rkpd.master_'.$tahun.'_status_data')->where(['kodepemda'=>$kodepemda],['status'=>$status,'pagu'=>static::$pagutotal],['transactioncode'=>$transactioncode])->first();
-			$data_status=DB::table('rkpd.master_'.$tahun.'_status')->where(['kodepemda'=>$kodepemda],['status'=>$status,'pagu'=>static::$pagutotal],['transactioncode'=>$transactioncode])->first();
-
-			if((!empty($data_last)) AND (!empty($data_status))){
-				DB::table('rkpd.master_'.$tahun.'_status as s')->where('s.kodepemda',$kodepemda)->where('s.tahun',$tahun)
-				->update(['tipe_pengambilan'=>$data_status->tipe_pengambilan]);
-
-			}else{
-
-				DB::table('rkpd.master_'.$tahun.'_bidang')->where('kodepemda',$kodepemda)->where('tahun',$tahun)->delete();
-
-				DB::table('rkpd.master_'.$tahun.'_status_data')->where('kodepemda',$kodepemda)->where('tahun',$tahun)->update(['matches'=>false,'tipe_pengambilan'=>$data_status->tipe_pengambilan]);
-
-				$store=STOREDATA::store($data,$kodepemda,$tahun,$transactioncode);
-
-			}
-
-			if($console){
-				$daerah=DB::table('public.master_daerah')->find($kodepemda);
-				return $kodepemda.' - '.$daerah->nama.' tahun : '.$tahun.' -> build pagu : Rp.'.number_format(static::$pagutotal);
-			}else{
-				return back();
-
-			}
-
 
 
 
