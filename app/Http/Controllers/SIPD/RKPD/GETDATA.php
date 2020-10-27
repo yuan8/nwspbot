@@ -463,7 +463,7 @@ class GETDATA extends Controller
 	static function kegiatan_sumberdana($data,$key){
 
 
-		$kodedata=static::$tahun.'.'.static::$kodepemda.'.'.static::$kodebidang.'.'.static::$kodeskpd.'.'.static::$kodeprogram.'.'.static::$kodekegiatan.'.S.'.($data['sumberdana']);
+		$kodedata=static::$tahun.'.'.static::$kodepemda.'.'.static::$kodebidang.'.'.static::$kodeskpd.'.'.static::$kodeprogram.'.'.static::$kodekegiatan.'.S.'.(isset($data['kodesumberdana'])?$data['kodesumberdana']:null).'.'.(isset($data['sumberdana'])?$data['sumberdana']:'');
 
 		static::$kodesumberdana=$kodedata;
 
@@ -493,7 +493,7 @@ class GETDATA extends Controller
 	static function sub_kegiatan_sumberdana($data,$key){
 
 
-		$kodedata=static::$tahun.'.'.static::$kodepemda.'.'.static::$kodebidang.'.'.static::$kodeskpd.'.'.static::$kodeprogram.'.'.static::$kodekegiatan.'.'.static::$kodesubkegiatan.'.S.'.($data['sumberdana']);
+		$kodedata=static::$tahun.'.'.static::$kodepemda.'.'.static::$kodebidang.'.'.static::$kodeskpd.'.'.static::$kodeprogram.'.'.static::$kodekegiatan.'.'.static::$kodesubkegiatan.'.S.'.(isset($data['kodesumberdana'])?$data['kodesumberdana']:null).'.'.(isset($data['sumberdana'])?$data['sumberdana']:'');
 
 		static::$kodesumberdana_sub=$kodedata;
 
