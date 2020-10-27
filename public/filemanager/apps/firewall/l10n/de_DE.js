@@ -1,0 +1,22 @@
+OC.L10N.register(
+    "firewall",
+    {
+    "Select a tag" : "Bitte ein Tag auswählen",
+    "At least one of the given rules is invalid." : "Mindestens eine der Regeln ist ungültig.",
+    "Firewall rules saved." : "Firewallregeln gespeichert.",
+    "An error occurred while saving the rules." : "Während des Speicherns der Regeln ist ein Fehler aufgetreten.",
+    "Firewall debug level saved." : "Firewall Debug Level gespeichert.",
+    "An error occurred while saving debug level." : "Während des Speicherns des Debug Levels ist ein Fehler aufgetreten.",
+    "Access to this resource has been forbidden by a file firewall rule." : "Der Zugriff auf diese Resource wird von einer Regel der File Firewall blockiert.",
+    "If you feel this is an error, please contact your administrator or %slogout%s." : "Falls dies ein Fehler ist kontaktieren Sie bitte Ihren Administrator oder %slogout%s.",
+    "File Firewall" : "File Firewall",
+    "Requests are checked against all rules that are defined below." : "Zugriffe werden gegen alle unten definierten Regeln geprüft.",
+    "A request is blocked when at least one rule matches the request." : "Ein Zugriff wird blockiert wenn mindestens eine Regel greift.",
+    "A rule matches a request when all conditions evaluate to true." : "Eine Regel greift bei einem Zugriff wenn alle Bedingungen als \"wahr\" ausgewertet werden.",
+    "Save Rules" : "Regeln speichern",
+    "Logging" : "Logging",
+    "Off" : "Aus",
+    "Failures Only" : "Nur Fehler",
+    "On" : "An"
+},
+"nplurals=2; plural=(n != 1);");

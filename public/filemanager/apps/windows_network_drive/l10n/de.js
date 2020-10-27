@@ -1,0 +1,23 @@
+OC.L10N.register(
+    "windows_network_drive",
+    {
+    "Saving..." : "Speichern...",
+    "Saved" : "Gespeichert",
+    "Save" : "Speichern",
+    "Global Credentials" : "Globale Anmeldeinformationen",
+    "No credentials saved" : "Anmeldeinformationen wurden nicht gespeichert",
+    "Credentials hardcoded in config file" : "In Konfigurationsdatei festgelegte Zugangsdaten",
+    "Config key" : "Konfigurationswert",
+    "Log-in credentials, save in database" : "Anmeldeinformationen, in Datenbank speichern",
+    "User entered, store in database" : "Benutzer eingegeben, in Datenbank speichern",
+    "Username" : "Benutzername",
+    "Password" : "Passwort",
+    "Windows Network Drive" : "Windows Network Drive",
+    "Host" : "Server",
+    "Share" : "Freigabe",
+    "Remote subfolder" : "Unterverzeichnis remote",
+    "Permission Manager" : "Berechtigungsmanager",
+    "Domain" : "Domäne",
+    "Global credentials for external storage" : "Globale Anmeldeinformationen für externe Speicherorte"
+},
+"nplurals=2; plural=(n != 1);");

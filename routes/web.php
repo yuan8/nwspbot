@@ -24,9 +24,9 @@ Route::prefix('initial/{tahun}')->group(function(){
 	Route::get('sat','SAT\InitCtrl@init');
 });
 
-Route::group(['prefix' => 'filemanager', 'middleware' => ['web', 'auth','can:user_kita']], function () {
-     \UniSharp\LaravelFilemanager\Lfm::routes();
- });
+// Route::group(['prefix' => 'filemanager', 'middleware' => ['web', 'auth','can:user_kita']], function () {
+//      \UniSharp\LaravelFilemanager\Lfm::routes();
+//  });
 
 Route::get('/box-sipd/{tahun?}', 'BOT@get_sipd_rkpd')->name('box.sipd');
 Route::get('/box-sirup/{tahun?}', 'BOT@get_sirup')->name('box.sirup');
