@@ -39,7 +39,7 @@
 	}
 
 	setTimeout(function(){
-		get_data('{{route('init-match',['tahun'=>$tahun,'kodepemda'=>0])}}');
+		get_data('{{route('init-match',['tahun'=>$tahun,'kodepemda'=>isset($_GET['kodepemda'])?$_GET['kodepemda']:0])}}');
 
 	},500);
 
