@@ -24,6 +24,8 @@ Route::prefix('initial/{tahun}')->group(function(){
 	Route::get('sat','SAT\InitCtrl@init');
 	Route::get('match_rkpd_old','Macth@init')->name('init-match');
 	Route::get('match_rkpd','Macth@index')->name('init-match-index');
+	Route::get('match_rkpd_air_minum','Macth@air_minum')->name('init-match-air_minum');
+
 
 
 });
