@@ -167,7 +167,14 @@ class GETDATA extends Controller
 			    ]
 			];
 
-			$data_status=DB::table('rkpd.master_'.$tahun.'_status')->where(['kodepemda'=>$kodepemda],['status'=>$status,'pagu'=>static::$pagutotal],['transactioncode'=>$transactioncode])->first();
+			$data_status=DB::table('rkpd.master_'.$tahun.'_status')->where([
+				['kodepemda','=',$kodepemda],
+				['status','=',$status],
+				['pagu','=',static::$pagutotal],
+				['transactioncode','=',$transactioncode]
+			])->first();
+
+
 			$approve=false;
 
 			if($data_status){
