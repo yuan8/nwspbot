@@ -12,7 +12,7 @@
 
    function change_pemetaan(context,ids,data){
       var data_json={};
-      data_json['id'].concat(ds.split(','));
+      data_json['id']=(ds.split(','));
       data_json['data']=data;
 
       if(context=='U'){
@@ -234,7 +234,7 @@
 
     var value=[];
     $('.'+class_id).each(function(i,d){
-      value=value.concat($(d).val());
+      value=value.push($(d).val());
     });
 
 
