@@ -68,4 +68,16 @@ class Macth extends Controller
     public function index($tahun){
     	return view('macth_index')->with('tahun',$tahun);
     }
+
+
+    public function air_minum($tahun){
+    	$d=DB::table('public.master_daerah as d')
+    	->selectRaw("d.id,min(d.nama) as nama, count(k.*) jumlah_kegiatan")
+    	->join('rkpd.master_'.$tahun.'_kegiatan as k',[['k.kodepemda','=','d.id']])
+    	->where([['k.id_urusan','=',3],['k.id_sub_urusan','=',12],['d.kode_daerah_parent','=',null]])
+    	->orderBy('d.id','asc')->groupBy('d.id')->get();
+
+    	return view('match_air_minum')->with('data',$d);
+
+    }
 }
