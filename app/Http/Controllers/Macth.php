@@ -11,7 +11,7 @@ class Macth extends Controller
     public function init($tahun,Request $request){
     	set_time_limit(-1);
         ini_set('memory_limit', '6095M');
-        
+
     	$kodepemda=0;
     	if($request->kodepemda){
     		$kodepemda=$request->kodepemda;	
@@ -76,7 +76,7 @@ class Macth extends Controller
     public function air_minum($tahun){
     	$d=DB::table('public.master_daerah as d')
     	->selectRaw("d.id,min(d.nama) as nama, count(k.*) jumlah_kegiatan")
-    	->join('rkpd.master_'.$tahun.'_kegiatan as k',[['k.kodepemda','=','d.id']])
+    	->leftJoin('rkpd.master_'.$tahun.'_kegiatan as k',[['k.kodepemda','=','d.id']])
     	->where([['k.id_urusan','=',3],['k.id_sub_urusan','=',12],['d.kode_daerah_parent','=',null]])
     	->orderBy('d.id','asc')->groupBy('d.id')->get();
 
