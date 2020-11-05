@@ -76,7 +76,7 @@ class Macth extends Controller
     public function air_minum($tahun){
     	$d=DB::table('public.master_daerah as d')
     	->selectRaw("d.id,min(d.nama) as nama, count(k.*) jumlah_kegiatan")
-    	->leftJoin('rkpd.master_'.$tahun.'_kegiatan as k',[['k.kodepemda','=','d.id'],['k.id_urusan','=',3],['k.id_sub_urusan','=',12]])
+    	->leftJoin('rkpd.master_'.$tahun.'_kegiatan as k',[['k.kodepemda','=','d.id'],['k.id_urusan','=',DB::raw(3)],['k.id_sub_urusan','=',DB::raw(12)]])
     	->where([['d.kode_daerah_parent','=',null]])
     	->orderBy('d.id','asc')->groupBy('d.id')->get();
 
