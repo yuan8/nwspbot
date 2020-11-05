@@ -9,6 +9,9 @@ class Macth extends Controller
     //
 
     public function init($tahun,Request $request){
+    	set_time_limit(-1);
+        ini_set('memory_limit', '6095M');
+        
     	$kodepemda=0;
     	if($request->kodepemda){
     		$kodepemda=$request->kodepemda;	
