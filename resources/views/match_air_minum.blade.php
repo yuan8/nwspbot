@@ -12,7 +12,7 @@
 	</thead>
 	<tbody id="append-dom">
 		@foreach($data as $d)
-			<tr>
+			<tr class="{{$d->jumlah_kegiatan?'':'bg-danger'}}">
 				<td>{{$d->id}}</td>
 				<td>{{$d->nama}}</td>
 				<td>{{number_format($d->jumlah_kegiatan)}} Kegiatan</td>
