@@ -6,8 +6,7 @@
 		<tr>
 			<th>KODEPEMDA</th>
 			<th>PEMDA</th>
-			<th>DB LAMA</th>
-			<th>TERCOPY</th>
+			<th>JUMLAH KEGIATAN AIR MINUM</th>
 
 		</tr>
 	</thead>
