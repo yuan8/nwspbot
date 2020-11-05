@@ -19,15 +19,23 @@
 <script>
 	
 	function get_data(link){
-		$.get(link,function(res){
-			if(res.link){
-				$('#append-dom').append(res.data);
-				get_data(res.link);
-			}else{
-				$('#append-dom').append(res.data);
-				
-			}
-		});
+
+		$.ajax({
+			   url: link,
+			   success: function(data){
+			        //...
+			        res=data;
+			        if(res.link){
+						$('#append-dom').append(res.data);
+						get_data(res.link);
+					}else{
+						$('#append-dom').append(res.data);
+
+					}
+			   },
+			   timeout: 1000000 //in milliseconds
+			});
+		
 	}
 
 	setTimeout(function(){
