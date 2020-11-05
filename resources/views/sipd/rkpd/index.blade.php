@@ -166,7 +166,7 @@
 						</button>
 
 						@endif
-						@if(($d->attemp) OR ($d->rkpd_match))
+						@if(($d->attemp) OR ($d->pagu_store))
 								<a href="{{route('sipd.rkpd.json',['tahun'=>$tahun,'json_id'=>$d->kodepemda?$d->kodepemda:$d->kodepemda_m.'.'.$d->status.'.'.$d->transactioncode])}}" class="btn btn-primary  btn-xs">JSON</a>
 								<a href="{{route('sipd.rkpd.data.download',['tahun'=>$tahun,'kodepemda'=>$d->kodepemda?$d->kodepemda:$d->kodepemda_m])}}" class="btn btn-info  btn-xs"><i class="fa fa-download"></i> .</a>
 								<a href="{{route('sipd.rkpd.pemetaan',['tahun'=>$tahun,'kodepemda'=>$d->kodepemda?$d->kodepemda:$d->kodepemda_m])}}" class="btn btn-navy bg-navy btn-xs">PEMETAAN</a>
