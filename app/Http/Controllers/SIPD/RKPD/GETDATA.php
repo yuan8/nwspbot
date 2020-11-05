@@ -179,7 +179,6 @@ class GETDATA extends Controller
 				->update(['s.attemp'=>DB::raw("(s.attemp::numeric + 1)")]);
 				}
 
-
 			}
 
 			$context = static::con($path,'get',[]);
@@ -204,12 +203,16 @@ class GETDATA extends Controller
 
 				}
 
+
 				$data_last=DB::table('rkpd.master_'.$tahun.'_status_data')->where(['kodepemda'=>$kodepemda],['status'=>$status,'pagu'=>static::$pagutotal],['transactioncode'=>$transactioncode])->first();
 				$data_status=DB::table('rkpd.master_'.$tahun.'_status')->where(['kodepemda'=>$kodepemda],['status'=>$status,'pagu'=>static::$pagutotal],['transactioncode'=>$transactioncode])->first();
 
 				if((!empty($data_last)) AND (!empty($data_status))){
 					DB::table('rkpd.master_'.$tahun.'_status as s')->where('s.kodepemda',$kodepemda)->where('s.tahun',$tahun)
 					->update(['tipe_pengambilan'=>$data_status->tipe_pengambilan,'method'=>$data_status->method,'sumber_data'=>$data_status->sumber_data,'perkada'=>$data_status->perkada,'nomenklatur'=>$data_status->nomenklatur]);
+					DB::table('rkpd.master_'.$tahun.'_bidang')->where('kodepemda',$kodepemda)->where('tahun',$tahun)->delete();
+					
+					$store=STOREDATA::store($data,$kodepemda,$tahun,$transactioncode);
 
 				}else{
 

@@ -135,9 +135,16 @@ class LISTDATA extends Controller
 
   public function getJson($tahun=null,$transactioncode){
         static::$tahun=$tahun??date('Y');
+        $data=DB::table('rkpd.master_'.$tahun.'_status_data')->where('kodepemda',$transactioncode)->first();
+        if($data){
+          $transactioncode=$data->kodepemda.'.'.$data->status.'.'.$data->transactioncode;
+
+        }else{
+          return abort(404);
+        }
 
         if(file_exists(storage_path('app/BOT/SIPD/RKPD/'.static::$tahun.'/JSON-DATA/'.$transactioncode.'.json'))){
-            return file_get_contents(storage_path('app/BOT/SIPD/RKPD/'.static::$tahun.'/JSON-DATA/'.$transactioncode.'.json'));
+            return json_encode(json_decode(file_get_contents(storage_path('app/BOT/SIPD/RKPD/'.static::$tahun.'/JSON-DATA/'.$transactioncode.'.json')))) ;
         }else{
             return abort('404');
         }
