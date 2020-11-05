@@ -170,7 +170,6 @@ class GETDATA extends Controller
 			$data_status=DB::table('rkpd.master_'.$tahun.'_status')->where([
 				['kodepemda','=',$kodepemda],
 				['status','=',$status],
-				['pagu','=',static::$pagutotal],
 				['transactioncode','=',$transactioncode]
 			])->first();
 
@@ -182,8 +181,9 @@ class GETDATA extends Controller
 					$approve=true;
 				}else{
 
-				DB::table('rkpd.master_'.$tahun.'_status as s')->where('s.kodepemda',$kodepemda)->where('s.tahun',$tahun)
-				->update(['s.attemp'=>DB::raw("(s.attemp::numeric + 1)")]);
+					DB::table('rkpd.master_'.$tahun.'_status as s')->where('s.kodepemda',$kodepemda)->where('s.tahun',$tahun)
+					->update(['s.attemp'=>DB::raw("(s.attemp::numeric + 1)")]);
+					return 'SUMBER DATA DIARAHKAN PADA DOKUMEN, ANDA HANYA BISA MELAKUKAN UPDATE PADA FORM UPLOAD DOKUMEN RKPD';
 				}
 
 			}
@@ -240,7 +240,7 @@ class GETDATA extends Controller
 				}
 
 			}else{
-				return 'SUMBER DATA DIARAHKAN PADA DOKUMEN, ANDA HANYA BISA MELAKUKAN UPDATE PADA FORM UPLOAD DOKUMEN RKPD';
+				
 			}
 
 
