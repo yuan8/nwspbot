@@ -22,6 +22,10 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::prefix('initial/{tahun}')->group(function(){
 	Route::get('rkpd','SIPD\RKPD\InitCtrl@init');
 	Route::get('sat','SAT\InitCtrl@init');
+	Route::get('match_rkpd_old','Macth@init')->name('init-match');
+	Route::get('match_rkpd','Macth@index')->name('init-match-index');
+
+
 });
 
 // Route::group(['prefix' => 'filemanager', 'middleware' => ['web', 'auth','can:user_kita']], function () {
