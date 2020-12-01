@@ -151,7 +151,6 @@ class LISTDATA extends Controller
   }
 
   public function index($tahun,Request $request){
-
 		if(!Schema::connection('pgsql')->hasTable('rkpd.'.'master_'.$tahun.'_status')){
 			return view('sipd.rkpd.index')->with(['data'=>[],'page_block'=>true,'tahun'=>$tahun]);
 		}
@@ -196,7 +195,9 @@ class LISTDATA extends Controller
 
         $bidang=DB::table('rkpd.master_'.$tahun.'_bidang')->where('uraibidang','!=',null)->groupBy(DB::raw("uraibidang"))->selectRaw("upper(uraibidang) as uraibidang")->get()->pluck('uraibidang');
 
-        $urusan=DB::table('public.master_urusan')->whereIn('id',json_decode(env('URUSAN'),true))->selectRaw("upper(nama) as nama,id")->get()->toArray();
+
+
+        $urusan=DB::table('public.master_urusan')->whereIn('id',json_decode(env('URUSAN'),true))->selectRaw("upper(nama) as nama,id")->get();
 
 
 		return view('sipd.rkpd.index')->with(['data'=>$data,'tahun'=>$tahun,'last_list_date'=>$last_list_date,'request'=>$request,'pemda'=>$pemda,'bidang'=>$bidang,'urusan'=>$urusan]);

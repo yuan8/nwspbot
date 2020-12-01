@@ -62,6 +62,25 @@ class GETDATA extends Controller
 	}
 
 
+	static function repVal($val){
+
+		if($val){
+			$val=(string)$val;
+			$data= preg_replace('/[a-zA-Z]/', '', $val);
+			
+			if(is_numeric($data)){
+				return $data;
+			}else{
+				return $data;
+			}
+		}else{
+			return null;
+		}
+		
+		return null;
+	}
+
+
 	 static function store_masive($tahun,Request $request){
     	$page=(int) (isset($request->page)?$request->page:0);
 			$status=5;
@@ -358,9 +377,10 @@ class GETDATA extends Controller
 	}
 
 	static function bidang($data,$key){
+		$kodedata=static::kodedata($data['kodebidang'],$key);
+		static::$listingcode[]=$kodedata;
 
-
-		static::$kodebidang=($data['kodebidang']);
+		static::$kodebidang=($kodedata);
 		static::$uraibidang=strtoupper(trim($data['uraibidang'],true));
 		static::$kodeskpd=$data['kodeskpd'];
 		static::$uraiskpd=strtoupper(trim($data['uraiskpd'],true));
@@ -390,6 +410,9 @@ class GETDATA extends Controller
 
 	}
 
+	static function utf8($text){
+		return utf8_encode($text);
+	}
 
 	static function program($data,$key){
 		static::$kodeprogram=$data['kodeprogram'];
@@ -412,7 +435,7 @@ class GETDATA extends Controller
 			'uraibidang'=>static::$uraibidang,
 			'id_urusan'=>static::$id_urusan,
 			'kodeprogram'=>static::$kodeprogram,
-			'uraiprogram'=>strtoupper(trim($data['uraiprogram'],true)),
+			'uraiprogram'=>static::utf8((string)strtoupper(trim($data['uraiprogram'],true))),
 			'id_urusan'=>0,
 			'kodeskpd'=>static::$kodeskpd,
 			'uraiskpd'=>static::$uraiskpd,
@@ -420,9 +443,7 @@ class GETDATA extends Controller
 			'transactioncode'=>static::$transactioncode,
 			'capaian'=>[],
 			'kegiatan'=>[],
-
 		];
-
 
 		return $data_return;
 
@@ -432,7 +453,7 @@ class GETDATA extends Controller
 		static::$kodekegiatan=$data['kodekegiatan'];
 
 		if(is_numeric($data['pagu'])){
-			static::$pagutotal+=(float)$data['pagu'];
+			static::$pagutotal+=(float)static::repVal($data['pagu']);
 		}
 
 		$kodedata=static::$tahun.'.'.static::$kodepemda.'.'.static::$kodebidang.'.'.static::$kodeskpd.'.'.static::$kodeprogram.'.'.static::$kodekegiatan;
@@ -452,16 +473,14 @@ class GETDATA extends Controller
 			'id_sub_urusan'=>null,
 			'kodeprogram'=>static::$kodeprogram,
 			'kodekegiatan'=>static::$kodekegiatan,
-			'uraikegiatan'=>strtoupper(trim($data['uraikegiatan'],true)),
-			'pagu'=>(float)$data['pagu'],
-			'pagu_p'=>(float)$data['pagu_p'],
+			'uraikegiatan'=>static::utf8(strtoupper(trim($data['uraikegiatan'],true))),
+			'pagu'=>(float)static::repVal($data['pagu']),
+			'pagu_p'=>(float)static::repVal($data['pagu_p']),
 			'transactioncode'=>static::$transactioncode,
 			'id_urusan'=>0,
 			'sumberdana'=>[],
 			'indikator'=>[],
 			'subkegiatan'=>[],
-
-
 		];
 
 
@@ -491,7 +510,7 @@ class GETDATA extends Controller
 			'kodekegiatan'=>static::$kodekegiatan,
 			'kodesumberdana'=>(isset($data['kodesumberdana'])?$data['kodesumberdana']:null),
 			'sumberdana'=>(isset($data['sumberdana'])?$data['sumberdana']:null),
-			'pagu'=>(float)(isset($data['pagu'])?$data['pagu']:NULL),
+			'pagu'=>(float)static::repVal((isset($data['pagu'])?$data['pagu']:NULL)),
 			'transactioncode'=>static::$transactioncode,
 		];
 
@@ -523,7 +542,7 @@ class GETDATA extends Controller
 			'kodesubkegiatan'=>static::$kodesubkegiatan,
 			'kodesumberdana'=>(isset($data['kodesumberdana'])?$data['kodesumberdana']:null),
 			'sumberdana'=>(isset($data['sumberdana'])?$data['sumberdana']:null),
-			'pagu'=>(float)(isset($data['pagu'])?$data['pagu']:NULL),
+			'pagu'=>(float)static::repVal((isset($data['pagu'])?$data['pagu']:NULL)),
 			'transactioncode'=>static::$transactioncode,
 		];
 
@@ -553,8 +572,8 @@ class GETDATA extends Controller
 			'kodekegiatan'=>static::$kodekegiatan,
 			'kodesubkegiatan'=>static::$kodesubkegiatan,
 			'uraisubkegiatan'=>$data['uraisubkegiatan'],
-			'pagu'=>(float)$data['pagu'],
-			'pagu_p'=>(float)$data['pagu_p'],
+			'pagu'=>(float)static::repVal($data['pagu']),
+			'pagu_p'=>(float)static::repVal($data['pagu_p']),
 			'transactioncode'=>static::$transactioncode,
 			'indikator'=>[],
 			'sumberdana'=>[],
@@ -587,15 +606,15 @@ class GETDATA extends Controller
 			'tolokukur'=>$data['tolokukur'],
 			'target'=>$data['target'],
 			'satuan'=>$data['satuan'],
-			'pagu'=>(float)$data['pagu'],
-			'pagu_p1'=>(float)$data['pagu_p1'],
-			'real_p1'=>$data['real_p1'],
-			'pagu_p2'=>(float)$data['pagu_p2'],
-			'real_p2'=>$data['real_p2'],
-			'pagu_p3'=>(float)$data['pagu_p3'],
-			'real_p3'=>$data['real_p3'],
+			'pagu'=>(float)static::repVal($data['pagu']),
+			'pagu_p1'=>(float)static::repVal($data['pagu_p1']),
+			'real_p1'=>(float)static::repVal($data['real_p1']),
+			'pagu_p2'=>(float)static::repVal($data['pagu_p2']),
+			'real_p2'=>(float)static::repVal($data['real_p2']),
+			'pagu_p3'=>(float)static::repVal($data['pagu_p3']),
+			'real_p3'=>(float)static::repVal($data['real_p3']),
 			'target_n1'=>$data['target_n1'],
-			'pagu_n1'=>(float)$data['pagu_n1'],
+			'pagu_n1'=>(float)static::repVal($data['pagu_n1']),
 			'transactioncode'=>static::$transactioncode,
 
 		];
@@ -616,6 +635,7 @@ class GETDATA extends Controller
 
 
 		static::$listingcode[]=$kodedata;
+		
 
 		$data_return=[
 			'kodedata'=>$kodedata,
@@ -625,17 +645,17 @@ class GETDATA extends Controller
 			'tolokukur'=>$data['tolokukur'],
 			'kodeprogram'=>static::$kodeprogram,
 			'kodekegiatan'=>static::$kodekegiatan,
-			'target'=>$data['target'],
+			'target'=>(string)$data['target'],
 			'satuan'=>$data['satuan'],
-			'pagu'=>(float)$data['pagu'],
-			'pagu_p1'=>(float)$data['pagu_p1'],
-			'real_p1'=>$data['real_p1'],
-			'pagu_p2'=>(float)$data['pagu_p2'],
-			'real_p2'=>$data['real_p2'],
-			'pagu_p3'=>(float)$data['pagu_p3'],
-			'real_p3'=>$data['real_p3'],
+			'pagu'=>(float)static::repVal($data['pagu']),
+			'pagu_p1'=>(float)static::repVal($data['pagu_p1']),
+			'real_p1'=>(float)static::repVal($data['real_p1']),
+			'pagu_p2'=>(float)static::repVal($data['pagu_p2']),
+			'real_p2'=>(float)static::repVal($data['real_p2']),
+			'pagu_p3'=>(float)static::repVal($data['pagu_p3']),
+			'real_p3'=>(float)static::repVal($data['real_p3']),
 			'target_n1'=>$data['target_n1'],
-			'pagu_n1'=>(float)$data['pagu_n1'],
+			'pagu_n1'=>(float)static::repVal($data['pagu_n1']),
 			'transactioncode'=>static::$transactioncode,
 
 
@@ -667,15 +687,15 @@ class GETDATA extends Controller
 			'tolokukur'=>$data['tolokukur'],
 			'target'=>$data['target'],
 			'satuan'=>$data['satuan'],
-			'pagu'=>(float)$data['pagu'],
-			'pagu_p1'=>(float)$data['pagu_p1'],
-			'real_p1'=>$data['real_p1'],
-			'pagu_p2'=>(float)$data['pagu_p2'],
-			'real_p2'=>$data['real_p2'],
-			'pagu_p3'=>(float)$data['pagu_p3'],
-			'real_p3'=>$data['real_p3'],
+			'pagu'=>(float)static::repVal($data['pagu']),
+			'pagu_p1'=>(float)static::repVal($data['pagu_p1']),
+			'real_p1'=>(float)static::repVal($data['real_p1']),
+			'pagu_p2'=>(float)static::repVal($data['pagu_p2']),
+			'real_p2'=>(float)static::repVal($data['real_p2']),
+			'pagu_p3'=>(float)static::repVal($data['pagu_p3']),
+			'real_p3'=>(float)static::repVal($data['real_p3']),
 			'target_n1'=>$data['target_n1'],
-			'pagu_n1'=>(float)$data['pagu_n1'],
+			'pagu_n1'=>(float)static::repVal($data['pagu_n1']),
 			'transactioncode'=>static::$transactioncode,
 
 		];

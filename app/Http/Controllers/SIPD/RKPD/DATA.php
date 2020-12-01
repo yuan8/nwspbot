@@ -260,6 +260,8 @@ class DATA extends Controller
         ])
         ->join('rkpd.master_'.$tahun.'_program as p','p.id','=','k.id_program')
         ->selectRaw('sum(pagu) as pagu ,count(distinct(uraikegiatan)) as count');
+
+
          if(($request->bidang)){
             $data=$data->where('p.uraibidang','ilike',$request->bidang);
 
@@ -280,6 +282,40 @@ class DATA extends Controller
         $data=$data->first();
         $data_rekap=$data->pagu;
 
+        $data_rkpd=DB::table('rkpd.'.'master_'.$tahun.'_kegiatan as k')->where([
+          'k.kodepemda'=>$kodepemda,
+          'k.tahun'=>$tahun
+        ])
+        ->groupBy('uraikegiatan')
+        ->join('rkpd.master_'.$tahun.'_program as p','p.id','=','k.id_program')
+
+        ->selectRaw("
+             string_agg(k.id::text,',') as ids,string_agg(p.id::text,',') as p_ids,max(k.kodekegiatan) as kodekegiatan,max(k.uraikegiatan) as uraikegiatan,max(k.kodepemda) as kodepemda,sum(k.pagu) as pagu ,max(p.kodeskpd) as p_kodeskpd, max(p.uraiskpd) as p_uraiskpd,max(p.kodebidang) as p_kodebidang,max(p.uraibidang) as p_uraibidang,max(p.kodeprogram) as p_kodeprogram,max(p.uraiprogram) as p_uraiprogram,max(k.id_urusan) as id_urusan,max(k.id_sub_urusan) as id_sub_urusan,(select u.nama from public.master_urusan as u where u.id=max(k.id_urusan)) as nama_urusan,(select s.nama from public.master_sub_urusan as s where s.id=max(k.id_sub_urusan)) as nama_sub_urusan");
+
+        if(($request->bidang)){
+            $data_rkpd=$data_rkpd->where('p.uraibidang','ilike',$request->bidang);
+
+        }
+        if(($request->q)){
+            $data_rkpd=$data_rkpd->where('k.uraikegiatan','ilike','%'.$request->q.'%');
+
+        }
+        if(($request->skpd) and (in_array($request->skpd,(array)$skpd->toArray()))){
+
+            $data_rkpd=$data_rkpd->where('p.uraiskpd','ilike',$request->skpd);
+        }else if($request->skpd){
+            return redirect()->route('sipd.rkpd.pemetaan',['tahun'=>$tahun,'kodepemda'=>$kodepemda,'bidang'=>$request->bidang]);
+
+        }
+
+          $data_rkpd=$data_rkpd->orderBy(DB::raw('max(p.uraibidang)'),'asc')->orderBy(DB::raw('max(p.uraiskpd)'),'asc')->orderBy(DB::raw('max(p.uraiprogram)'),'asc')->orderBy(DB::raw('max(k.uraikegiatan)'),'asc')->paginate(50);
+
+          $data_rkpd->appends([
+            'bidang'=>$request->bidang,
+            'q'=>$request->q,
+            'skpd'=>$request->skpd,
+          ]);
+
 
         return view('sipd.rkpd.pemetaan')->with([
 
@@ -291,9 +327,11 @@ class DATA extends Controller
           'status'=>$status,
           'daerah'=>$daerah,
           'urusan'=>$urusan,
+          'sub_urusan'=>$sub_urusan,
           'kodepemda'=>$kodepemda,
           'sub_urusan'=>$sub_urusan,
-          'pagu'=>($data_rekap)
+          'pagu'=>($data_rekap),
+          'data_rkpd'=>$data_rkpd
 
         ]);
 
@@ -339,7 +377,6 @@ class DATA extends Controller
             return redirect()->route('sipd.rkpd.pemetaan',['tahun'=>$tahun,'kodepemda'=>$kodepemda,'bidang'=>$request->bidang]);
 
         }
-
 
         $urusan=Db::table('public.master_urusan')->whereIn('id',json_decode(env('URUSAN'),true))->get();
         $sub_urusan=Db::table('public.master_sub_urusan')->whereIn('id_urusan',json_decode(env('URUSAN'),true))->get();

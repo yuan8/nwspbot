@@ -55,13 +55,7 @@
 
 <div class="box">
   <div class="box-header">
-    <h5><p><b>Mengambil Data..</b></p></h5>
-    <div class="progress">
-      <div class="progress-bar bg-yellow" role="progressbar" aria-valuenow="70" id="loader-data-json"
-      aria-valuemin="0" aria-valuemax="100" style="width:0%">
-        <span class="">0% sss</span>
-      </div>
-</div>
+
   </div>
   <div class="box-body table-responsive">
 
@@ -71,8 +65,8 @@
         <tr class="bg-primary">
         <form action="{{url()->full()}}" method="get" id="form-search">
             <th colspan="2">
-              <p><b>PAGU</b></p>
-              <p>Rp. {{number_format($pagu)}}</p>
+              {{-- <p><b>PAGU</b></p>
+              <p>Rp. {{number_format($pagu)}}</p> --}}
             </th>
               <th style="width: 250px;">
                 <select class="form-control" name="bidang" onchange="$('#form-search').submit()">
@@ -113,11 +107,12 @@
           <th style="width: 250px;">SUB URUSAN</th>
         </tr>
       </thead>
-      <tbody id="content-pemetaan">
-
+      <tbody >
+        @include('sipd.rkpd.them_pemetaan',['data'=>$data_rkpd,'urusan'=>$urusan,'sub_urusan'=>$sub_urusan,'page'=>$request->page??1])
       </tbody>
 
     </table>
+    {{$data_rkpd->links()}}
 
   </div>
 
@@ -225,9 +220,9 @@
 
   }
 
-  $(function(){
-    get_content();
-  });
+  // $(function(){
+  //   get_content();
+  // });
 
 
   function pemetaan_indikator_update(id,context,tipe,class_id){
