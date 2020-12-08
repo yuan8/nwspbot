@@ -45,8 +45,6 @@ class DashboardIndikatorCtrl extends Controller
     		,DB::raw('ind.id_master'),'=','i.id')
     		->where('tipe',$keytipe)->get();
 
-    	
-
 	    	return view('sipd.rkpd.dashboard.indikator.detail')->with(['data'=>$data,'tahun'=>$tahun,'tipe'=>$keytipe]);
     }
 
@@ -70,7 +68,6 @@ class DashboardIndikatorCtrl extends Controller
                     ind.kodepemda,
                     sum(case when ind.k_i is not null then 1 else 0 end) jumlah_indikator_output,
                     sum(case when ind.p_i is not null then 1 else 0 end) jumlah_indikator_outcome
-
                 ")
                 ->groupBy(['ind.kodepemda'])
                 ->leftJoin(

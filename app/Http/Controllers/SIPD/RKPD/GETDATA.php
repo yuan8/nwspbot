@@ -8,6 +8,9 @@ use Storage;
 use App\Http\Controllers\SIPD\RKPD\STOREDATA;
 use DB;
 use Illuminate\Support\Facades\Schema;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+
 
 class GETDATA extends Controller
 {
@@ -58,6 +61,16 @@ class GETDATA extends Controller
 
 			return 'https://sipd.go.id/';
 		// }
+
+	}
+
+
+
+	public function store_doc(Reqest $request){
+		$kodepemda=$request->kodepemda;
+		$spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load($request->file);
+
+		dd($spreadsheet);
 
 	}
 
